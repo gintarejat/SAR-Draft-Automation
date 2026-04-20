@@ -1,169 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Agentic SAR Generator — ajatau AML</title>
+</head>
+<body>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
-  .sar-root { font-family: 'IBM Plex Sans', sans-serif; font-size: 13px; color: var(--color-text-primary); }
-  .sar-mono { font-family: 'IBM Plex Mono', monospace; }
-  .sar-header { border-bottom: 1px solid var(--color-border-secondary); padding-bottom: 12px; margin-bottom: 16px; }
-  .sar-title { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-text-secondary); margin: 0 0 2px; }
-  .sar-subtitle { font-size: 18px; font-weight: 500; margin: 0; font-family: 'IBM Plex Mono', monospace; }
-  .sar-grid { display: grid; grid-template-columns: 240px 1fr; gap: 16px; }
-  .sar-panel { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 14px; }
-  .sar-panel-title { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 600; color: var(--color-text-tertiary); margin: 0 0 10px; font-family: 'IBM Plex Mono', monospace; }
-  .alert-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 10px 12px; margin-bottom: 8px; cursor: pointer; transition: border-color 0.15s; }
-  .alert-card:hover { border-color: var(--color-border-secondary); }
-  .alert-card.selected { border-color: #E24B4A; border-width: 1px; }
-  .alert-id { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; margin: 0 0 4px; }
-  .alert-type { font-size: 11px; color: var(--color-text-secondary); margin: 0 0 6px; }
-  .tag { display: inline-block; font-size: 9px; font-weight: 600; letter-spacing: 0.08em; padding: 2px 6px; border-radius: 3px; margin-right: 4px; margin-top: 2px; text-transform: uppercase; font-family: 'IBM Plex Mono', monospace; }
-  .tag-high { background: #FCEBEB; color: #A32D2D; }
-  .tag-mixer { background: #FAEEDA; color: #854F0B; }
-  .tag-media { background: #FAEEDA; color: #854F0B; }
-  .tag-clear { background: #EAF3DE; color: #3B6D11; }
-  .field-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 5px 0; border-bottom: 0.5px solid var(--color-border-tertiary); gap: 8px; }
-  .field-row:last-child { border-bottom: none; }
-  .field-label { font-size: 10px; color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.08em; white-space: nowrap; font-family: 'IBM Plex Mono', monospace; flex-shrink: 0; padding-top: 1px; }
-  .field-value { font-size: 11px; font-family: 'IBM Plex Mono', monospace; text-align: right; word-break: break-all; }
-  .btn-primary { background: var(--color-text-primary); color: var(--color-background-primary); border: none; border-radius: var(--border-radius-md); padding: 9px 18px; font-size: 12px; font-weight: 500; cursor: pointer; font-family: 'IBM Plex Sans', sans-serif; letter-spacing: 0.03em; width: 100%; margin-top: 10px; transition: opacity 0.15s; }
-  .btn-primary:hover { opacity: 0.8; }
-  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
-  .btn-export { background: #E24B4A; color: #fff; border: none; border-radius: var(--border-radius-md); padding: 9px 18px; font-size: 12px; font-weight: 500; cursor: pointer; font-family: 'IBM Plex Sans', sans-serif; letter-spacing: 0.03em; width: 100%; transition: opacity 0.15s; }
-  .btn-export:hover { opacity: 0.85; }
-  .btn-export:disabled { opacity: 0.35; cursor: not-allowed; }
-  .narrative-box { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 14px 16px; min-height: 220px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; line-height: 1.7; color: var(--color-text-primary); width: 100%; box-sizing: border-box; resize: vertical; }
-  .narrative-box:focus { outline: none; border-color: var(--color-border-primary); }
-  .check-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
-  .check-row:last-child { border-bottom: none; }
-  .check-row input[type=checkbox] { width: 14px; height: 14px; accent-color: #E24B4A; cursor: pointer; }
-  .check-label { font-size: 11px; font-weight: 500; cursor: pointer; }
-  .check-desc { font-size: 10px; color: var(--color-text-tertiary); margin-left: auto; font-family: 'IBM Plex Mono', monospace; }
-  .phase-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; font-family: 'IBM Plex Mono', monospace; padding: 3px 8px; border-radius: 3px; background: var(--color-background-info); color: var(--color-text-info); margin-bottom: 10px; }
-  .spinner { width: 14px; height: 14px; border: 2px solid var(--color-border-tertiary); border-top-color: var(--color-text-primary); border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .status-bar { display: flex; align-items: center; gap: 8px; font-size: 10px; font-family: 'IBM Plex Mono', monospace; color: var(--color-text-secondary); padding: 6px 10px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); margin-bottom: 10px; }
-  .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-  .dot-red { background: #E24B4A; }
-  .dot-amber { background: #EF9F27; }
-  .dot-green { background: #639922; }
-  .sar-export { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 16px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; line-height: 1.8; }
-  .sar-export h3 { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--color-text-tertiary); margin: 14px 0 6px; font-weight: 600; }
-  .sar-export h3:first-child { margin-top: 0; }
-  .sar-export-divider { border: none; border-top: 0.5px solid var(--color-border-secondary); margin: 10px 0; }
-  .success-banner { background: #EAF3DE; color: #27500A; border-radius: var(--border-radius-md); padding: 8px 12px; font-size: 11px; font-weight: 500; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
-  .error-banner { background: #FCEBEB; color: #791F1F; border-radius: var(--border-radius-md); padding: 8px 12px; font-size: 11px; font-weight: 500; margin-bottom: 10px; }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:       #0f0f0d;
+    --bg2:      #171715;
+    --border:   rgba(255,255,255,0.1);
+    --border2:  rgba(255,255,255,0.06);
+    --text:     #e8e4da;
+    --muted:    rgba(232,228,218,0.45);
+    --dim:      rgba(232,228,218,0.25);
+    --red:      #E24B4A;
+    --amber:    #EF9F27;
+    --green:    #639922;
+    --radius:   6px;
+  }
+
+  body { background: var(--bg); color: var(--text); font-family: 'IBM Plex Sans', sans-serif; font-size: 13px; min-height: 100vh; padding: 20px; }
+
+  #app { max-width: 960px; margin: 0 auto; }
+
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+
+  /* HEADER */
+  .header { border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end; }
+  .header-left p { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; font-family: 'IBM Plex Mono', monospace; }
+  .header-left h1 { font-size: 20px; font-weight: 500; font-family: 'IBM Plex Mono', monospace; }
+  .tags { display: flex; gap: 6px; align-items: center; }
+
+  /* TAGS */
+  .tag { display: inline-block; font-size: 9px; font-weight: 600; letter-spacing: 0.08em; padding: 2px 7px; border-radius: 3px; text-transform: uppercase; font-family: 'IBM Plex Mono', monospace; }
+  .tag-red   { background: rgba(226,75,74,0.15);   color: var(--red);   border: 1px solid rgba(226,75,74,0.3); }
+  .tag-amber { background: rgba(239,159,39,0.12);  color: var(--amber); border: 1px solid rgba(239,159,39,0.3); }
+  .tag-green { background: rgba(99,153,34,0.12);   color: var(--green); border: 1px solid rgba(99,153,34,0.3); }
+  .tag-gray  { background: rgba(255,255,255,0.06); color: var(--muted); border: 1px solid var(--border2); }
+
+  /* GRID */
+  .grid { display: grid; grid-template-columns: 240px 1fr; gap: 16px; }
+
+  /* PANELS */
+  .panel { background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 14px; margin-bottom: 12px; }
+  .panel-title { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 600; color: var(--dim); margin: 0 0 12px; font-family: 'IBM Plex Mono', monospace; }
+
+  /* METRICS */
   .metric-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-  .metric { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 8px 10px; }
-  .metric-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-text-tertiary); font-family: 'IBM Plex Mono', monospace; }
+  .metric { background: var(--bg); border: 0.5px solid var(--border2); border-radius: var(--radius); padding: 8px 10px; }
+  .metric-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--dim); font-family: 'IBM Plex Mono', monospace; }
   .metric-val { font-size: 15px; font-weight: 500; margin-top: 2px; font-family: 'IBM Plex Mono', monospace; }
-  .streaming-cursor { display: inline-block; width: 7px; height: 12px; background: var(--color-text-primary); margin-left: 2px; animation: blink 1s step-end infinite; vertical-align: text-bottom; }
+
+  /* ALERT CARDS */
+  .alert-card { background: var(--bg); border: 0.5px solid var(--border2); border-radius: var(--radius); padding: 10px 12px; margin-bottom: 8px; cursor: pointer; transition: border-color 0.15s; }
+  .alert-card:hover { border-color: var(--border); }
+  .alert-card.selected { border-color: var(--red); border-width: 1px; }
+  .alert-id { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; margin: 0 0 4px; }
+  .alert-type { font-size: 11px; color: var(--muted); margin: 0 0 7px; }
+
+  /* FIELD ROWS */
+  .field-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 5px 0; border-bottom: 0.5px solid var(--border2); gap: 8px; }
+  .field-row:last-child { border-bottom: none; }
+  .field-label { font-size: 10px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.08em; white-space: nowrap; font-family: 'IBM Plex Mono', monospace; flex-shrink: 0; padding-top: 1px; }
+  .field-value { font-size: 11px; font-family: 'IBM Plex Mono', monospace; text-align: right; word-break: break-all; }
+
+  /* STATUS BAR */
+  .status-bar { display: flex; align-items: center; gap: 8px; font-size: 10px; font-family: 'IBM Plex Mono', monospace; color: var(--muted); padding: 7px 10px; background: var(--bg2); border: 0.5px solid var(--border2); border-radius: var(--radius); margin-bottom: 12px; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .dot-red { background: var(--red); }
+  .dot-amber { background: var(--amber); }
+  .dot-green { background: var(--green); }
+
+  /* NARRATIVE */
+  .narrative-box { background: var(--bg); border: 0.5px solid var(--border2); border-radius: var(--radius); padding: 14px 16px; min-height: 240px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; line-height: 1.75; color: var(--text); width: 100%; resize: vertical; display: block; white-space: pre-wrap; }
+  textarea.narrative-box { outline: none; }
+  textarea.narrative-box:focus { border-color: var(--border); }
+
+  /* CHECKLIST */
+  .check-row { display: flex; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 0.5px solid var(--border2); }
+  .check-row:last-child { border-bottom: none; }
+  .check-row input[type=checkbox] { width: 14px; height: 14px; accent-color: var(--red); cursor: pointer; flex-shrink: 0; }
+  .check-label { font-size: 11px; font-weight: 500; cursor: pointer; flex: 1; }
+  .check-ref { font-size: 10px; color: var(--dim); font-family: 'IBM Plex Mono', monospace; white-space: nowrap; }
+
+  /* BUTTONS */
+  .btn { border: none; border-radius: var(--radius); padding: 9px 18px; font-size: 12px; font-weight: 500; cursor: pointer; font-family: 'IBM Plex Sans', sans-serif; letter-spacing: 0.03em; width: 100%; margin-top: 10px; transition: opacity 0.15s; }
+  .btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .btn-dark { background: var(--text); color: var(--bg); }
+  .btn-dark:hover:not(:disabled) { opacity: 0.85; }
+  .btn-red { background: var(--red); color: #fff; }
+  .btn-red:hover:not(:disabled) { opacity: 0.85; }
+
+  /* BANNERS */
+  .banner { border-radius: var(--radius); padding: 8px 12px; font-size: 11px; font-weight: 500; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .banner-error  { background: rgba(226,75,74,0.1);  color: #f08080; border: 0.5px solid rgba(226,75,74,0.3); }
+  .banner-success { background: rgba(99,153,34,0.12); color: #8fc44a; border: 0.5px solid rgba(99,153,34,0.3); }
+
+  /* SPINNER */
+  .spinner { width: 13px; height: 13px; border: 2px solid var(--border2); border-top-color: var(--text); border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; flex-shrink: 0; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* CURSOR */
+  .cursor { display: inline-block; width: 7px; height: 12px; background: var(--text); margin-left: 2px; animation: blink 1s step-end infinite; vertical-align: text-bottom; }
   @keyframes blink { 50% { opacity: 0; } }
+
+  /* EXPORT */
+  .export-doc { background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 18px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; line-height: 1.8; }
+  .export-doc h3 { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--dim); margin: 14px 0 6px; font-weight: 600; }
+  .export-doc h3:first-child { margin-top: 0; }
+  .export-hr { border: none; border-top: 0.5px solid var(--border); margin: 10px 0; }
+  .export-row { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 0.5px solid var(--border2); font-size: 10px; }
+  .export-row:last-child { border-bottom: none; }
+  .export-key { color: var(--dim); }
 </style>
 
-<div class="sar-root" id="app"></div>
+<div id="app"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script>
-const { useState, useRef, useCallback } = React;
+const { useState, useCallback } = React;
+const e = React.createElement;
 
 const ALERTS = [
   {
-    Customer_ID: 'CUST-NORDIC-772',
-    Transaction_Type: 'Cross-Border Wallet Transfer',
-    Risk_Level: 'High',
-    Adverse_Media: 'YES',
-    PEP_Status: 'Non-PEP',
-    SoW_Verified: 'NO',
-    Mixer_Flag: 'YES',
-    OSINT: 'Negative news in Swedish media; linked to sanctioned entities.',
-    OFAC: 'Clear',
-    Complexity: 'High-Risk Mixer Exposure'
+    id: 'CUST-NORDIC-772',
+    txType: 'Cross-Border Wallet Transfer',
+    risk: 'High',
+    adverseMedia: 'YES',
+    pep: 'Non-PEP',
+    sowVerified: 'NO',
+    mixer: 'YES',
+    osint: 'Negative news in Swedish media; linked to sanctioned entities.',
+    ofac: 'Clear',
+    complexity: 'High-Risk Mixer Exposure'
   },
   {
-    Customer_ID: 'BP-9921-LT',
-    Transaction_Type: 'Cross-Border Crypto-to-Fiat',
-    Risk_Level: 'High',
-    Adverse_Media: 'YES',
-    PEP_Status: 'Non-PEP',
-    SoW_Verified: 'NO',
-    Mixer_Flag: 'YES',
-    OSINT: 'Negative news in Nordic media regarding shell company links.',
-    OFAC: 'Clear',
-    Complexity: 'High-Complexity / Corporate'
+    id: 'BP-9921-LT',
+    txType: 'Cross-Border Crypto-to-Fiat',
+    risk: 'High',
+    adverseMedia: 'YES',
+    pep: 'Non-PEP',
+    sowVerified: 'NO',
+    mixer: 'YES',
+    osint: 'Negative news in Nordic media regarding shell company links.',
+    ofac: 'Clear',
+    complexity: 'High-Complexity / Corporate'
   }
 ];
 
-function App() {
-  const [selected, setSelected] = useState(0);
-  const [phase, setPhase] = useState('triage');
-  const [narrative, setNarrative] = useState('');
-  const [streaming, setStreaming] = useState(false);
-  const [streamText, setStreamText] = useState('');
-  const [checks, setChecks] = useState({ pof: false, kyc: false, mica: false, ofac: false });
-  const [exportDone, setExportDone] = useState(false);
-  const [error, setError] = useState('');
-  const alert = ALERTS[selected];
+function valColor(v) {
+  if (v === 'YES' || v === 'High') return '#E24B4A';
+  if (v === 'NO') return '#EF9F27';
+  if (v === 'Clear') return '#639922';
+  return 'inherit';
+}
 
+function App() {
+  const [sel, setSel] = useState(0);
+  const [phase, setPhase] = useState('triage'); // triage | investigating | review | exported
+  const [narrative, setNarrative] = useState('');
+  const [stream, setStream] = useState('');
+  const [streaming, setStreaming] = useState(false);
+  const [checks, setChecks] = useState({ pof: false, kyc: false, mica: false, ofac: false });
+  const [error, setError] = useState('');
+
+  const alert = ALERTS[sel];
   const allChecked = checks.pof && checks.kyc && checks.mica && checks.ofac;
 
-  const generateNarrative = useCallback(async () => {
+  const selectAlert = (i) => {
+    setSel(i);
+    setPhase('triage');
+    setNarrative('');
+    setStream('');
+    setChecks({ pof: false, kyc: false, mica: false, ofac: false });
+    setError('');
+  };
+
+  const generate = useCallback(async () => {
     setStreaming(true);
-    setStreamText('');
+    setStream('');
     setError('');
     setPhase('investigating');
+
     const prompt = `You are a Senior AML Compliance Officer at a Nordic FinTech institution, operating in the Second Line of Defence (2LoD). Generate a formal Statement of Facts (SOF) for an official SAR/STR filing based on the following alert data.
 
 Alert Data:
-- Customer ID: ${alert.Customer_ID}
-- Transaction Type: ${alert.Transaction_Type}
-- Risk Level: ${alert.Risk_Level}
-- Adverse Media Flag: ${alert.Adverse_Media}
-- PEP Status: ${alert.PEP_Status}
-- Source of Wealth Verified: ${alert.SoW_Verified}
-- Crypto Mixer Flag: ${alert.Mixer_Flag}
-- OSINT Summary: ${alert.OSINT}
-- OFAC Screening Result: ${alert.OFAC}
-- Business Model Complexity: ${alert.Complexity}
+- Customer ID: ${alert.id}
+- Transaction Type: ${alert.txType}
+- Risk Level: ${alert.risk}
+- Adverse Media Flag: ${alert.adverseMedia}
+- PEP Status: ${alert.pep}
+- Source of Wealth Verified: ${alert.sowVerified}
+- Crypto Mixer Flag: ${alert.mixer}
+- OSINT Summary: ${alert.osint}
+- OFAC Screening Result: ${alert.ofac}
+- Business Model Complexity: ${alert.complexity}
 
-Chain-of-thought analysis required:
-1. SUBJECT INFORMATION — Summarise key customer identifiers and risk profile in 2-3 sentences.
-2. STATEMENT OF FACTS — Describe the suspicious activity chronologically. Reference the Crypto Mixer Flag and explain why it indicates potential fund obfuscation.
-3. INVESTIGATIVE FINDINGS — Cross-reference the OSINT Summary with Nordic regulatory context (AMLD6, MiCA). Analyse the absence of Source of Wealth verification against the business model complexity.
-4. COMPLIANCE OFFICER DECISION — State clearly whether a SAR filing is recommended. Justify with reference to OFAC status, PEP status, and applicable regulations.
+Generate a professional SAR document with these sections:
+1. Case & Filing Details
+2. Subject Information
+3. Summary of Suspicious Activity (3 paragraphs covering: transaction facts, investigative findings cross-referencing OSINT with AMLD6/MiCA context, and SoW verification failure rationale)
+4. Detailed Transaction Information (table format)
+5. Nature of Suspicion — Red Flags
+6. Nature of Suspicion — Typologies
+7. Additional Information (evidence list, related accounts, adverse media references)
+8. Escalation Status
+9. Recommendation
+10. Signatures block
 
-Format as a professional compliance document. Use clear section headings. Use this as the base for document:
-1. Case & Filing Details: [Case Reference Number], [Report Prepared Date], [Filing Institution], [Department], [Contact].
-2. Subject Information: [Subject Full Name], [Date Of Birth], [Living Address], [Contact], [ID Number], [Account Number].
-3. Summary of Suspicious Activity: [Date] the transaction monitoring system generated multiple alerts for account [Subject Information: [Account Number], [Subject Information: [Subject Full Name]].
-(Paragraph one:) The alerts arose from [Subject's Transaction Information and reasoning why the alerts were generated by the transaction monitoring system. Chain-of-thought analysis: STATEMENT OF FACTS]. 
-(Paragraph two:) [Chain-of-thought analysis: [INVESTIGATIVE FINDINGS]].
-(Paragraph three:) Requested supporting documentation [Name Of The Provided Documents If Any] lacks verifiable detail [Decribe The Reason Of Filling SAR Report]. 
-[Add The Description Of The Proof, The Pattern, What the [STATEMENT OF FACTS] Actually Mean In This Context].
-4. Detailed Transaction Information: [Transactions Table With All The Suspicious And Related Transactions, Including: Column For Date Of The Transaction, Amount Of The Transaction, Sender/Receiver, Payment Method, Details]
-5. Nature of Suspicion — Red Flags: [List Of All The Suspicion And Unexplained Behavior That Points To Fraud].
-6. Nature of Suspicion — Typologies: [The Meaning Of Each Subject's Behavior On The List Explained In Typologies].
-7. Additional Information: [Supporting Evidence: List Of The Evidence In This SAR Report], [Related Accounts], [Connected Parties], [Public Records: Adverse Media, Counterparty Corporate Records].
-8. Escalation Status: [Action Taken Because Of Suspicion].
-9. Recommendation: [Chain-of-thought analysis: COMPLIANCE OFFICER DECISION].
-10. Signatures: Prepared by: [Officer's Who Filled The SAR Full Name], [Officer's Signature], Reviewed by: [Employee That Reviewed The Filled SAR Report], [Reviewer's Signature].
-11. Footer: Confidential — For internal use / law enforcement referral only. 
-
-Usage of the Base: Fill the parts that are inside the square brackets "[]".
-
-Be concise and precise.`;
+Be concise and precise. Use compliance language appropriate for FIU submission.`;
 
     try {
-              const res = await fetch('/api/generate', {
-              method: 'POST',
-              body: JSON.stringify({ model: '...', ... })
-            {
+      const res = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
           model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
+          max_tokens: 1500,
           stream: true,
           messages: [{ role: 'user', content: prompt }]
         })
       });
 
       if (!res.ok) {
-        throw new Error(`API error ${res.status}`);
+        const text = await res.text();
+        throw new Error('API error ' + res.status + ': ' + text);
       }
 
       const reader = res.body.getReader();
@@ -174,227 +242,231 @@ Be concise and precise.`;
         const { done, value } = await reader.read();
         if (done) break;
         const chunk = decoder.decode(value);
-        const lines = chunk.split('\n');
-        for (const line of lines) {
-          if (line.startsWith('data: ')) {
-            const data = line.slice(6);
-            if (data === '[DONE]') break;
-            try {
-              const parsed = JSON.parse(data);
-              if (parsed.type === 'content_block_delta' && parsed.delta?.text) {
-                full += parsed.delta.text;
-                setStreamText(full);
-              }
-            } catch {}
-          }
+        for (const line of chunk.split('\n')) {
+          if (!line.startsWith('data: ')) continue;
+          const data = line.slice(6);
+          if (data === '[DONE]') break;
+          try {
+            const parsed = JSON.parse(data);
+            if (parsed.type === 'content_block_delta' && parsed.delta?.text) {
+              full += parsed.delta.text;
+              setStream(full);
+            }
+          } catch (_) {}
         }
       }
       setNarrative(full);
       setPhase('review');
-    } catch (e) {
-      setError('Investigation failed: ' + e.message);
+    } catch (err) {
+      setError('Investigation failed: ' + err.message);
       setPhase('triage');
     } finally {
       setStreaming(false);
     }
   }, [alert]);
 
-  const handleExport = () => {
-    if (!allChecked) return;
-    setExportDone(true);
-    setPhase('exported');
-  };
-
-  return React.createElement('div', { className: 'sar-root' },
-    React.createElement('div', { className: 'sar-header' },
-      React.createElement('p', { className: 'sar-title' }, 'Anti-Money Laundering · Second Line of Defence'),
-      React.createElement('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' } },
-        React.createElement('h1', { className: 'sar-subtitle' }, 'Agentic SAR Generator'),
-        React.createElement('div', { style: { display: 'flex', gap: 6, alignItems: 'center' } },
-          React.createElement('span', { className: 'tag tag-high' }, 'L1 → L2 QC'),
-          React.createElement('span', { className: 'tag tag-clear' }, 'MiCA / AMLD6')
+  // ── LEFT PANEL ──
+  const leftPanel = e('div', null,
+    e('div', { className: 'panel' },
+      e('p', { className: 'panel-title' }, 'EDD Alert Triage'),
+      e('div', { className: 'metric-row' },
+        e('div', { className: 'metric' },
+          e('div', { className: 'metric-label' }, 'Alerts'),
+          e('div', { className: 'metric-val' }, '2')
+        ),
+        e('div', { className: 'metric' },
+          e('div', { className: 'metric-label' }, 'Risk'),
+          e('div', { className: 'metric-val', style: { color: '#E24B4A' } }, 'HIGH')
+        )
+      ),
+      ALERTS.map((a, i) =>
+        e('div', {
+          key: i,
+          className: 'alert-card' + (sel === i ? ' selected' : ''),
+          onClick: () => selectAlert(i)
+        },
+          e('p', { className: 'alert-id' }, a.id),
+          e('p', { className: 'alert-type' }, a.txType),
+          e('div', { style: { display: 'flex', flexWrap: 'wrap', gap: 4 } },
+            e('span', { className: 'tag tag-red' }, 'High Risk'),
+            a.mixer === 'YES' && e('span', { className: 'tag tag-amber' }, 'Mixer'),
+            a.adverseMedia === 'YES' && e('span', { className: 'tag tag-amber' }, 'Adverse Media')
+          )
         )
       )
     ),
-
-    React.createElement('div', { className: 'sar-grid' },
-      React.createElement('div', null,
-        React.createElement('div', { className: 'sar-panel', style: { marginBottom: 12 } },
-          React.createElement('p', { className: 'sar-panel-title' }, 'EDD Alert Triage'),
-          React.createElement('div', { className: 'metric-row' },
-            React.createElement('div', { className: 'metric' },
-              React.createElement('div', { className: 'metric-label' }, 'Alerts'),
-              React.createElement('div', { className: 'metric-val' }, '2')
-            ),
-            React.createElement('div', { className: 'metric' },
-              React.createElement('div', { className: 'metric-label' }, 'Risk'),
-              React.createElement('div', { className: 'metric-val', style: { color: '#E24B4A' } }, 'HIGH')
-            )
-          ),
-          ALERTS.map((a, i) =>
-            React.createElement('div', {
-              key: i,
-              className: 'alert-card' + (selected === i ? ' selected' : ''),
-              onClick: () => { setSelected(i); setPhase('triage'); setNarrative(''); setStreamText(''); setChecks({ pof: false, kyc: false, mica: false, ofac: false }); setExportDone(false); setError(''); }
-            },
-              React.createElement('p', { className: 'alert-id' }, a.Customer_ID),
-              React.createElement('p', { className: 'alert-type' }, a.Transaction_Type),
-              React.createElement('div', null,
-                React.createElement('span', { className: 'tag tag-high' }, 'High Risk'),
-                a.Mixer_Flag === 'YES' && React.createElement('span', { className: 'tag tag-mixer' }, 'Mixer'),
-                a.Adverse_Media === 'YES' && React.createElement('span', { className: 'tag tag-media' }, 'Adverse Media')
-              )
-            )
-          )
-        ),
-
-        React.createElement('div', { className: 'sar-panel' },
-          React.createElement('p', { className: 'sar-panel-title' }, 'Alert Detail'),
-          [
-            ['CUST ID', alert.Customer_ID],
-            ['TX TYPE', alert.Transaction_Type],
-            ['PEP STATUS', alert.PEP_Status],
-            ['SoW VERIFIED', alert.SoW_Verified],
-            ['MIXER FLAG', alert.Mixer_Flag],
-            ['OFAC', alert.OFAC],
-            ['COMPLEXITY', alert.Complexity]
-          ].map(([k, v]) =>
-            React.createElement('div', { key: k, className: 'field-row' },
-              React.createElement('span', { className: 'field-label' }, k),
-              React.createElement('span', { className: 'field-value', style: { color: (v === 'YES' || v === 'High') ? '#E24B4A' : v === 'NO' ? '#BA7517' : v === 'Clear' ? '#639922' : 'inherit' } }, v)
-            )
-          )
-        )
-      ),
-
-      React.createElement('div', null,
-        phase === 'triage' && React.createElement('div', null,
-          React.createElement('div', { className: 'status-bar' },
-            React.createElement('span', { className: 'dot dot-amber' }),
-            'Awaiting agentic investigation — select alert and initiate'
-          ),
-          React.createElement('div', { className: 'sar-panel' },
-            React.createElement('p', { className: 'sar-panel-title' }, 'OSINT Summary'),
-            React.createElement('p', { style: { margin: 0, fontFamily: 'IBM Plex Mono, monospace', fontSize: 11, lineHeight: 1.7, color: 'var(--color-text-secondary)' } }, alert.OSINT),
-          ),
-          error && React.createElement('div', { className: 'error-banner' }, error),
-          React.createElement('button', {
-            className: 'btn-primary',
-            onClick: generateNarrative,
-            disabled: streaming
-          }, 'Initiate Agentic Investigation →')
-        ),
-
-        (phase === 'investigating') && React.createElement('div', null,
-          React.createElement('div', { className: 'status-bar' },
-            React.createElement('span', { className: 'spinner' }),
-            'Claude is analysing blockchain patterns and OSINT data...'
-          ),
-          React.createElement('div', { className: 'sar-panel' },
-            React.createElement('p', { className: 'sar-panel-title' }, 'Statement of Facts — Generating'),
-            React.createElement('div', { className: 'narrative-box', style: { minHeight: 280, display: 'block', whiteSpace: 'pre-wrap' } },
-              streamText,
-              React.createElement('span', { className: 'streaming-cursor' })
-            )
-          )
-        ),
-
-        phase === 'review' && React.createElement('div', null,
-          React.createElement('div', { className: 'status-bar' },
-            React.createElement('span', { className: 'dot dot-amber' }),
-            'L2 Quality Check — Human-in-the-Loop review required'
-          ),
-          React.createElement('div', { className: 'sar-panel', style: { marginBottom: 12 } },
-            React.createElement('p', { className: 'sar-panel-title' }, 'Statement of Facts — Edit & Validate'),
-            React.createElement('textarea', {
-              className: 'narrative-box',
-              value: narrative,
-              onChange: e => setNarrative(e.target.value),
-              style: { minHeight: 240, display: 'block' }
-            })
-          ),
-          React.createElement('div', { className: 'sar-panel', style: { marginBottom: 10 } },
-            React.createElement('p', { className: 'sar-panel-title' }, 'Bitpanda AFC · 2LoD Validation Checklist'),
-            [
-              ['pof', 'Proof of Funds / Wealth (PoF/W) Verified', 'AML Art. 8(3)'],
-              ['kyc', 'KYC Validation Confirmed (Identity & Residency)', 'AMLD6 §13'],
-              ['mica', 'MiCA Crypto Exposure & Nordic Media Review', 'MiCA Reg. 2023/1114'],
-              ['ofac', 'OFAC / Sanctions Screening Re-confirmed', 'OFAC 31 CFR']
-            ].map(([key, label, ref]) =>
-              React.createElement('div', { key, className: 'check-row' },
-                React.createElement('input', {
-                  type: 'checkbox',
-                  id: 'chk-' + key,
-                  checked: checks[key],
-                  onChange: e => setChecks(c => ({ ...c, [key]: e.target.checked }))
-                }),
-                React.createElement('label', { htmlFor: 'chk-' + key, className: 'check-label' }, label),
-                React.createElement('span', { className: 'check-desc' }, ref)
-              )
-            )
-          ),
-          !allChecked && React.createElement('div', { className: 'error-banner' }, 'Submission blocked — all 2LoD validation checks must be confirmed before export.'),
-          React.createElement('button', {
-            className: 'btn-export',
-            onClick: handleExport,
-            disabled: !allChecked
-          }, allChecked ? 'Export Official SAR / STR Report →' : 'Complete checklist to unlock export')
-        ),
-
-        phase === 'exported' && React.createElement('div', null,
-          React.createElement('div', { className: 'success-banner' },
-            '✓ SAR_Report_' + alert.Customer_ID + '.pdf — certified and exported'
-          ),
-          React.createElement('div', { className: 'sar-export' },
-            React.createElement('h3', null, '◆ Official Suspicious Activity Report'),
-            React.createElement('div', { style: { fontSize: 11, color: 'var(--color-text-secondary)', marginBottom: 6, fontFamily: 'IBM Plex Mono, monospace' } },
-              'Reference: SAR/' + alert.Customer_ID + '/2026 · Filed: ' + new Date().toISOString().split('T')[0]
-            ),
-            React.createElement('hr', { className: 'sar-export-divider' }),
-            React.createElement('h3', null, 'Section I — Subject Information'),
-            [
-              ['Customer ID', alert.Customer_ID],
-              ['Transaction Type', alert.Transaction_Type],
-              ['Risk Classification', alert.Risk_Level],
-              ['Adverse Media', alert.Adverse_Media],
-              ['PEP Status', alert.PEP_Status],
-              ['Source of Wealth', alert.SoW_Verified === 'YES' ? 'Verified' : 'Not Verified'],
-              ['Crypto Mixer Exposure', alert.Mixer_Flag === 'YES' ? 'Detected' : 'None'],
-              ['OFAC / Sanctions', alert.OFAC],
-              ['Business Complexity', alert.Complexity]
-            ].map(([k, v]) =>
-              React.createElement('div', { key: k, style: { display: 'flex', justifyContent: 'space-between', padding: '3px 0', borderBottom: '0.5px solid var(--color-border-tertiary)', fontSize: 10 } },
-                React.createElement('span', { style: { color: 'var(--color-text-tertiary)' } }, k),
-                React.createElement('span', { style: { fontWeight: 500, color: (v === 'Detected' || v === 'Not Verified' || v === 'High') ? '#E24B4A' : v === 'Clear' ? '#639922' : 'inherit' } }, v)
-              )
-            ),
-            React.createElement('hr', { className: 'sar-export-divider' }),
-            React.createElement('h3', null, 'Section II — Statement of Facts & Findings'),
-            React.createElement('div', { style: { whiteSpace: 'pre-wrap', fontSize: 10, lineHeight: 1.75, color: 'var(--color-text-secondary)' } }, narrative),
-            React.createElement('hr', { className: 'sar-export-divider' }),
-            React.createElement('h3', null, 'Section III — Compliance Officer Decision'),
-            React.createElement('div', { style: { fontSize: 10, lineHeight: 1.75 } },
-              'Decision: ', React.createElement('strong', null, 'RECOMMEND SAR FILING'),
-              React.createElement('br', null),
-              'L2 Quality Check Status: ', React.createElement('span', { style: { color: '#639922', fontWeight: 500 } }, 'VALIDATED'),
-              React.createElement('br', null),
-              'PoF/W: ✓  KYC: ✓  MiCA: ✓  OFAC: ✓'
-            ),
-            React.createElement('hr', { className: 'sar-export-divider' }),
-            React.createElement('div', { style: { fontSize: 10, color: 'var(--color-text-tertiary)', fontStyle: 'italic' } },
-              'Certified by: Compliance Officer — Second Line of Defence (2LoD) · ' + new Date().toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })
-            )
-          ),
-          React.createElement('button', {
-            className: 'btn-primary',
-            style: { marginTop: 10 },
-            onClick: () => { setPhase('triage'); setNarrative(''); setStreamText(''); setChecks({ pof: false, kyc: false, mica: false, ofac: false }); setExportDone(false); }
-          }, '← New Investigation')
+    e('div', { className: 'panel' },
+      e('p', { className: 'panel-title' }, 'Alert Detail'),
+      [
+        ['CUST ID',    alert.id],
+        ['TX TYPE',    alert.txType],
+        ['PEP',        alert.pep],
+        ['SoW',        alert.sowVerified],
+        ['MIXER',      alert.mixer],
+        ['OFAC',       alert.ofac],
+        ['COMPLEXITY', alert.complexity]
+      ].map(([k, v]) =>
+        e('div', { key: k, className: 'field-row' },
+          e('span', { className: 'field-label' }, k),
+          e('span', { className: 'field-value', style: { color: valColor(v) } }, v)
         )
       )
     )
   );
+
+  // ── RIGHT PANEL ──
+  let rightPanel;
+
+  if (phase === 'triage') {
+    rightPanel = e('div', null,
+      e('div', { className: 'status-bar' },
+        e('span', { className: 'dot dot-amber' }),
+        'Awaiting investigation — select alert and initiate'
+      ),
+      e('div', { className: 'panel' },
+        e('p', { className: 'panel-title' }, 'OSINT Summary'),
+        e('p', { style: { fontFamily: 'IBM Plex Mono, monospace', fontSize: 11, lineHeight: 1.7, color: 'rgba(232,228,218,0.55)', margin: 0 } }, alert.osint)
+      ),
+      error && e('div', { className: 'banner banner-error' }, error),
+      e('button', { className: 'btn btn-dark', onClick: generate, disabled: streaming },
+        'Initiate Agentic Investigation →'
+      )
+    );
+  }
+
+  if (phase === 'investigating') {
+    rightPanel = e('div', null,
+      e('div', { className: 'status-bar' },
+        e('span', { className: 'spinner' }),
+        'Claude is analysing blockchain patterns and OSINT data...'
+      ),
+      e('div', { className: 'panel' },
+        e('p', { className: 'panel-title' }, 'Statement of Facts — Generating'),
+        e('div', { className: 'narrative-box', style: { minHeight: 300 } },
+          stream,
+          e('span', { className: 'cursor' })
+        )
+      )
+    );
+  }
+
+  if (phase === 'review') {
+    rightPanel = e('div', null,
+      e('div', { className: 'status-bar' },
+        e('span', { className: 'dot dot-amber' }),
+        'L2 Quality Check — Human-in-the-Loop review required'
+      ),
+      e('div', { className: 'panel', style: { marginBottom: 12 } },
+        e('p', { className: 'panel-title' }, 'Statement of Facts — Edit & Validate'),
+        e('textarea', {
+          className: 'narrative-box',
+          value: narrative,
+          onChange: ev => setNarrative(ev.target.value),
+          style: { minHeight: 260 }
+        })
+      ),
+      e('div', { className: 'panel', style: { marginBottom: 10 } },
+        e('p', { className: 'panel-title' }, '2LoD Validation Checklist'),
+        [
+          ['pof',  'Proof of Funds / Wealth (PoF/W) Verified',          'AML Art. 8(3)'],
+          ['kyc',  'KYC Validation Confirmed (Identity & Residency)',    'AMLD6 §13'],
+          ['mica', 'MiCA Crypto Exposure & Nordic Media Review',         'MiCA 2023/1114'],
+          ['ofac', 'OFAC / Sanctions Screening Re-confirmed',           'OFAC 31 CFR']
+        ].map(([key, label, ref]) =>
+          e('div', { key, className: 'check-row' },
+            e('input', {
+              type: 'checkbox',
+              id: 'chk-' + key,
+              checked: checks[key],
+              onChange: ev => setChecks(c => ({ ...c, [key]: ev.target.checked }))
+            }),
+            e('label', { htmlFor: 'chk-' + key, className: 'check-label' }, label),
+            e('span', { className: 'check-ref' }, ref)
+          )
+        )
+      ),
+      !allChecked && e('div', { className: 'banner banner-error' },
+        'Submission blocked — complete all 2LoD checks to unlock export.'
+      ),
+      e('button', {
+        className: 'btn btn-red',
+        onClick: () => setPhase('exported'),
+        disabled: !allChecked
+      }, allChecked ? 'Export Official SAR / STR Report →' : 'Complete checklist to unlock export')
+    );
+  }
+
+  if (phase === 'exported') {
+    const today = new Date().toISOString().split('T')[0];
+    rightPanel = e('div', null,
+      e('div', { className: 'banner banner-success' },
+        '✓ SAR_Report_' + alert.id + '.pdf — certified and exported'
+      ),
+      e('div', { className: 'export-doc' },
+        e('h3', null, '◆ Official Suspicious Activity Report'),
+        e('div', { style: { fontSize: 10, color: 'rgba(232,228,218,0.4)', marginBottom: 8, fontFamily: 'IBM Plex Mono, monospace' } },
+          'Ref: SAR/' + alert.id + '/2026  ·  Filed: ' + today
+        ),
+        e('hr', { className: 'export-hr' }),
+        e('h3', null, 'Section I — Subject Information'),
+        [
+          ['Customer ID',        alert.id],
+          ['Transaction Type',   alert.txType],
+          ['Risk Classification',alert.risk],
+          ['Adverse Media',      alert.adverseMedia],
+          ['PEP Status',         alert.pep],
+          ['Source of Wealth',   alert.sowVerified === 'YES' ? 'Verified' : 'Not Verified'],
+          ['Crypto Mixer',       alert.mixer === 'YES' ? 'Detected' : 'None'],
+          ['OFAC / Sanctions',   alert.ofac],
+          ['Business Complexity',alert.complexity]
+        ].map(([k, v]) =>
+          e('div', { key: k, className: 'export-row' },
+            e('span', { className: 'export-key' }, k),
+            e('span', { style: { fontWeight: 500, color: valColor(v) } }, v)
+          )
+        ),
+        e('hr', { className: 'export-hr' }),
+        e('h3', null, 'Section II — Statement of Facts'),
+        e('div', { style: { whiteSpace: 'pre-wrap', fontSize: 10, lineHeight: 1.8, color: 'rgba(232,228,218,0.6)' } }, narrative),
+        e('hr', { className: 'export-hr' }),
+        e('h3', null, 'Section III — Compliance Officer Decision'),
+        e('div', { style: { fontSize: 10, lineHeight: 1.8 } },
+          'Decision: ', e('strong', null, 'RECOMMEND SAR FILING'), e('br'),
+          'L2 Status: ', e('span', { style: { color: '#8fc44a', fontWeight: 500 } }, 'VALIDATED'), e('br'),
+          'PoF/W: ✓   KYC: ✓   MiCA: ✓   OFAC: ✓'
+        ),
+        e('hr', { className: 'export-hr' }),
+        e('div', { style: { fontSize: 10, color: 'rgba(232,228,218,0.3)', fontStyle: 'italic' } },
+          'Certified by: Compliance Officer — 2LoD  ·  ' + new Date().toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })
+        )
+      ),
+      e('button', {
+        className: 'btn btn-dark',
+        style: { marginTop: 10 },
+        onClick: () => selectAlert(sel)
+      }, '← New Investigation')
+    );
+  }
+
+  return e('div', { id: 'app' },
+    e('div', { className: 'header' },
+      e('div', { className: 'header-left' },
+        e('p', null, 'Anti-Money Laundering · Second Line of Defence'),
+        e('h1', null, 'Agentic SAR Generator')
+      ),
+      e('div', { className: 'tags' },
+        e('span', { className: 'tag tag-red' }, 'L1 → L2 QC'),
+        e('span', { className: 'tag tag-green' }, 'MiCA / AMLD6')
+      )
+    ),
+    e('div', { className: 'grid' },
+      leftPanel,
+      rightPanel
+    )
+  );
 }
 
-ReactDOM.createRoot(document.getElementById('app')).render(React.createElement(App));
+ReactDOM.createRoot(document.getElementById('app')).render(e(App));
 </script>
+</body>
+</html>
