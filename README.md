@@ -99,7 +99,7 @@ index.html receives narrative text, sets React state
 ### Step 1 — Triage
 Officer selects which TM alert to work on. Two sample alerts are pre-loaded:
 - `CUST-NORDIC-772` — Crypto mixer exposure, Swedish adverse media
-- `BP-9921-LT` — Shell company / crypto-to-fiat, Nordic adverse media
+- `BP-9921-LT` — Shell company / crypto-to-fiat, Lithuanian/Nordic adverse media
 
 The alert panel shows pre-populated risk flags (Mixer, Adverse Media, High Risk) and the OSINT summary from the monitoring system.
 
