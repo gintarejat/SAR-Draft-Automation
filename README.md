@@ -1,12 +1,14 @@
 # SAR Draft Automation
-### Agentic Suspicious Activity Report Generator
+### Suspicious Activity Report drafting workflow with an AI-written first draft
 **ajatau AML · Second Line of Defence (2LoD)**
 
 ---
 
 ## What This Is
 
-A 6-step web application that assists AML compliance officers in drafting, reviewing, and exporting Suspicious Activity Reports (SAR/STR). It combines a structured data-entry workflow with AI-generated narrative drafting, a mandatory human validation checkpoint, and a real PDF export.
+A 6-step web application that assists AML compliance officers in drafting, reviewing, and exporting Suspicious Activity Reports (SAR/STR). It combines a structured data-entry workflow with one AI call that drafts the narrative, a mandatory human validation checkpoint, and a PDF export.
+
+It is a workflow tool, not an AI agent: the model is called once, with no tools and no loop.
 
 **This tool does not file reports. It drafts them.**
 Every output requires a human compliance officer to review, edit, and approve before any regulatory action is taken. The AI generates a starting point — the officer owns the final document.
@@ -29,14 +31,14 @@ TM Alert Triggered
        ▼
 [Step 5]    Officer reviews, edits, and validates     ◄── CRITICAL GATE
        │      ← Human reads every sentence
-       │      ← Human confirms 4 regulatory checkboxes
+       │      ← Human confirms 4 checklist items
        │      ← Export is BLOCKED until all 4 are ticked
        ▼
-[Step 6]    PDF downloaded for internal sign-off / FIU submission
-              ← Human MLRO reviews and countersigns
+[Step 6]    PDF downloaded for internal sign-off
+              ← Officer / MLRO fills in the decision and countersigns
 ```
 
-The 2LoD checklist in Step 5 is not decorative. Until all four items are checked by a human officer, the export button remains disabled. This enforces the regulatory requirement that SAR filings are human-authorised documents, not automated outputs.
+The 2LoD checklist in Step 5 is not decorative. Until all four items are checked by a human officer, the export button remains disabled. The filing decision is left blank in the PDF for the officer and MLRO to complete. The AI never makes it.
 
 ---
 
@@ -45,7 +47,8 @@ The 2LoD checklist in Step 5 is not decorative. Until all four items are checked
 ```
 SAR-Draft-Automation/
 │
-├── index.html          # Single-page React app (all UI, logic, PDF export)
+├── public/
+│   └── index.html      # Single-page React app (all UI, logic, PDF export)
 │                       # No build step — loads React and jsPDF from CDN
 │
 ├── api/
@@ -86,7 +89,7 @@ Anthropic API
     │
     │  { content: [{ type: "text", text: "..." }] }
     ▼
-api/generate.js streams response back to browser
+api/generate.js passes the response back to the browser
     │
     ▼
 index.html receives narrative text, sets React state
@@ -148,10 +151,12 @@ ${txStr}   // ← each row the officer entered, formatted as key:value
 Write exactly 3 professional paragraphs:
 1. STATEMENT OF FACTS: Chronological. Reference actual dates/amounts.
    Explain why mixer flag indicates fund obfuscation.
-2. INVESTIGATIVE FINDINGS: Cross-reference OSINT with AMLD6/MiCA.
-   Analyse SoW failure. Cite specific regulatory articles.
-3. COMPLIANCE DECISION: Recommend or not. Cite OFAC, PEP, AMLD6 Art. 33.
-   Be definitive.`
+2. INVESTIGATIVE FINDINGS: Link the OSINT to the transaction pattern and
+   typology. Analyse the SoW gap. Do not cite article numbers.
+3. FILING CONSIDERATIONS: Factors for and against filing, incl. OFAC and
+   PEP status. Do not make or recommend the filing decision.
+
+Use only facts given above. If something is unknown, say it is unknown.`
 ```
 
 The API call is non-streaming (`stream: false`). The response is a standard JSON object:
@@ -179,12 +184,14 @@ The generated narrative appears in a textarea. The officer must:
 2. **Edit it** — correct any inaccuracies, add context Claude couldn't know
 3. **Tick all 4 checkboxes:**
 
-| Checkbox | Regulatory basis | What the officer is confirming |
-|----------|-----------------|-------------------------------|
-| Proof of Funds / Wealth verified | AML Art. 8(3) | SoF/SoW documentation has been reviewed |
-| KYC confirmed | AMLD6 §13 | Identity and residency documents checked |
-| MiCA crypto exposure reviewed | MiCA Reg. 2023/1114 | Crypto asset exposure assessed under MiCA |
-| OFAC / Sanctions re-confirmed | OFAC 31 CFR | Sanctions screening re-run and clear |
+| Checkbox | Reference | What the officer is confirming |
+|----------|-----------|-------------------------------|
+| Proof of Funds / Wealth verified | AMLD4 Art. 13(1)(d), Art. 18 | SoF/SoW documentation has been reviewed |
+| KYC confirmed | AMLD4 Art. 13(1)(a) | Identity and residency documents checked |
+| Crypto exposure reviewed | AMLD4 Art. 18(2) | Mixer / unhosted-wallet exposure examined as unusual or complex activity |
+| OFAC / Sanctions re-confirmed | OFAC 31 CFR Ch. V | Sanctions screening re-run and result recorded |
+
+AMLD4 = Directive (EU) 2015/849. From July 2027 these obligations move to the AML Regulation (EU) 2024/1624; the reporting duty there is Article 69.
 
 The export button is **programmatically disabled** until all four are checked:
 
@@ -213,8 +220,8 @@ This is not a UI suggestion. It is an enforced gate.
 | 5 | Red flags list (auto-generated from alert data) |
 | 6 | Typologies (ML stage analysis — layering, integration, etc.) |
 | 7 | Additional info — evidence list, related accounts, adverse media |
-| 8 | Escalation status — account hold, EDD initiated, FIU referral pending |
-| 9 | Recommendation — RECOMMEND SAR FILING (with regulatory basis) |
+| 8 | Escalation — account action and EDD fields for the officer to fill in; FIU referral pending MLRO decision |
+| 9 | Decision — File / Do not file / More information needed, ticked by the officer or MLRO, with a written rationale |
 | 10 | Signature block — officer name + MLRO countersignature line |
 
 The PDF is saved as `SAR_[ALERT_ID]_[DATE].pdf` directly to the officer's Downloads folder.
@@ -233,7 +240,7 @@ The PDF is saved as `SAR_[ALERT_ID]_[DATE].pdf` directly to the officer's Downlo
 | Correct inaccuracies in the narrative | **Officer** |
 | Confirm PoF/W verification | **Officer** |
 | Confirm KYC validation | **Officer** |
-| Confirm MiCA crypto review | **Officer** |
+| Confirm crypto exposure review | **Officer** |
 | Confirm OFAC re-screening | **Officer** |
 | Approve export | **Officer** |
 | MLRO countersignature | **Senior Officer** |
@@ -256,23 +263,25 @@ Never put the API key in `index.html` or any client-side file. It must only exis
 ## Regulatory Context
 
 The tool is designed against the following frameworks:
-- **EU AMLD (4th–6th Directives)** — SAR/STR reporting obligations, EDD triggers
-- **EU MiCA (Reg. 2023/1114)** — Crypto-asset service provider obligations, Travel Rule
-- **OFAC 31 CFR** — US sanctions screening requirements
-- **FATF 40 Recommendations** — Risk-based approach, beneficial ownership
-- **Nordic FIU requirements** — Reporting thresholds and FIU submission formats (FI, DK, SE)
+- **AMLD4 (Directive (EU) 2015/849)** — customer due diligence (Art. 13), enhanced due diligence (Art. 18), reporting to the FIU (Art. 33)
+- **AMLR (Regulation (EU) 2024/1624)** — replaces most of AMLD4 from July 2027; reporting of suspicions is Art. 69
+- **AMLD6 (Directive (EU) 2018/1673)** — criminal-law definition of money laundering and predicate offences (not the source of reporting or CDD duties)
+- **MiCA (Reg. (EU) 2023/1114)** and **TFR (Reg. (EU) 2023/1113, Travel Rule)** — context for crypto-asset service providers
+- **OFAC (31 CFR Chapter V)** — US sanctions
+- **FATF 40 Recommendations** — risk-based approach, beneficial ownership
 
-The checklist in Step 5 maps directly to specific articles in these frameworks. Each checkbox is a regulatory obligation, not a UX pattern.
+The tool does not produce any specific FIU's submission format. References are for orientation; check them against the official texts before relying on them.
 
 ---
 
 ## Limitations
 
 1. **No real database** — alerts and dummy data are hardcoded. In production, these would pull from a live TM system.
-2. **No audit trail** — the app does not log who reviewed what or when. Production use requires an audit log.
-3. **No FIU submission** — the PDF is downloaded for manual review and submission. Direct API submission to FIUs is not implemented.
-4. **Claude can hallucinate** — the narrative may contain plausible-sounding but incorrect details. The officer's review in Step 5 exists specifically to catch this. Never submit a Claude-generated narrative without reading it.
-5. **Two sample alerts only** — real deployment would integrate with actual TM alert feeds.
+2. **No sanctions screening or SQL** — the OFAC status on each sample alert is a fixed value. Screening and TM rules are on the roadmap, not built.
+3. **No audit trail** — the app does not log who reviewed what or when. Production use requires an audit log.
+4. **No FIU submission** — the PDF is downloaded for manual review and submission. Direct API submission to FIUs is not implemented.
+5. **Claude can hallucinate** — the narrative may contain plausible-sounding but incorrect details. The officer's review in Step 5 exists specifically to catch this. Never submit a Claude-generated narrative without reading it.
+6. **Two sample alerts only** — real deployment would integrate with actual TM alert feeds.
 
 ---
 

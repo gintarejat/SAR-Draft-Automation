@@ -3,35 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Agentic SAR Generator — ajatau AML</title>
+<title>SAR Draft Automation — ajatau AML</title>
 </head>
 <body>
+<a class="aos-back" href="https://ajatauaml.com/aml-operating-system.html">&larr; AML Operating System</a>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;600;700&family=Permanent+Marker&family=Special+Elite&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#0f0f0d;--bg2:#171715;--bg3:#1e1e1b;
-  --border:rgba(255,255,255,0.1);--border2:rgba(255,255,255,0.06);
-  --text:#e8e4da;--muted:rgba(232,228,218,0.5);--dim:rgba(232,228,218,0.28);
-  --red:#E24B4A;--amber:#EF9F27;--green:#639922;--teal:#14b882;
-  --r:6px;
+  --bg:#fffdf8;--bg2:#f7f3ea;--bg3:#ece6d8;
+  --border:#141414;--border2:#d6cfbf;
+  --text:#141414;--muted:#4a463f;--dim:#8a857b;
+  --red:#e4161b;--amber:#b98900;--green:#1f7a3a;--teal:#1f7a3a;
+  --yellow:#ffd60a;--paper:#f3efe6;
+  --r:2px;
 }
-body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-serif;font-size:13px;min-height:100vh;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Archivo',system-ui,sans-serif;font-size:13px;min-height:100vh;padding:0}
 #root{max-width:1020px;margin:0 auto;padding:20px}
 
 /* TOP NAV */
 .topnav{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:14px;margin-bottom:18px}
-.topnav-left p{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;font-family:'IBM Plex Mono',monospace}
-.topnav-left h1{font-size:19px;font-weight:500;font-family:'IBM Plex Mono',monospace}
+.topnav-left p{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;font-family:'Special Elite','Courier New',monospace}
+.topnav-left h1{font-size:19px;font-weight:500;font-family:'Special Elite','Courier New',monospace}
 .nav-tabs{display:flex;gap:2px}
-.nav-tab{padding:7px 14px;font-size:10px;font-family:'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);background:transparent;border:0.5px solid transparent;border-radius:var(--r);cursor:pointer;transition:all .15s}
+.nav-tab{padding:7px 14px;font-size:10px;font-family:'Special Elite','Courier New',monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);background:transparent;border:0.5px solid transparent;border-radius:var(--r);cursor:pointer;transition:all .15s}
 .nav-tab:hover{color:var(--text);background:var(--bg2)}
 .nav-tab.active{color:var(--text);background:var(--bg2);border-color:var(--border2)}
 .nav-tab.docs-tab.active{color:var(--teal);border-color:rgba(20,184,130,0.3);background:rgba(20,184,130,0.08)}
 
 /* STEP BAR */
 .steps{display:flex;border:0.5px solid var(--border2);border-radius:var(--r);overflow:hidden;margin-bottom:16px}
-.step{flex:1;padding:7px 4px;font-size:10px;font-family:'IBM Plex Mono',monospace;letter-spacing:.07em;text-transform:uppercase;color:var(--dim);background:var(--bg2);border-right:0.5px solid var(--border2);text-align:center}
+.step{flex:1;padding:7px 4px;font-size:10px;font-family:'Special Elite','Courier New',monospace;letter-spacing:.07em;text-transform:uppercase;color:var(--dim);background:var(--bg2);border-right:0.5px solid var(--border2);text-align:center}
 .step:last-child{border-right:none}
 .step.active{color:var(--text);background:var(--bg3);font-weight:500}
 .step.done{color:var(--green)}
@@ -39,15 +41,15 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-ser
 /* LAYOUT */
 .grid{display:grid;grid-template-columns:210px 1fr;gap:14px}
 .panel{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--r);padding:12px;margin-bottom:10px}
-.pt{font-size:9px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--dim);margin:0 0 10px;font-family:'IBM Plex Mono',monospace}
+.pt{font-size:9px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--dim);margin:0 0 10px;font-family:'Special Elite','Courier New',monospace}
 
 /* ALERT CARDS */
 .ac{background:var(--bg);border:0.5px solid var(--border2);border-radius:var(--r);padding:9px 11px;margin-bottom:7px;cursor:pointer;transition:border-color .15s}
 .ac:hover{border-color:var(--border)}
 .ac.sel{border-color:var(--red)}
-.aid{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;margin:0 0 2px}
+.aid{font-family:'Special Elite','Courier New',monospace;font-size:11px;font-weight:500;margin:0 0 2px}
 .atp{font-size:11px;color:var(--muted);margin:0 0 6px}
-.tag{display:inline-block;font-size:9px;font-weight:500;letter-spacing:.06em;padding:2px 6px;border-radius:3px;text-transform:uppercase;font-family:'IBM Plex Mono',monospace;margin-right:3px}
+.tag{display:inline-block;font-size:9px;font-weight:500;letter-spacing:.06em;padding:2px 6px;border-radius:3px;text-transform:uppercase;font-family:'Special Elite','Courier New',monospace;margin-right:3px}
 .t-r{background:rgba(226,75,74,.14);color:var(--red);border:0.5px solid rgba(226,75,74,.3)}
 .t-a{background:rgba(239,159,39,.12);color:var(--amber);border:0.5px solid rgba(239,159,39,.3)}
 .t-g{background:rgba(99,153,34,.12);color:var(--green);border:0.5px solid rgba(99,153,34,.3)}
@@ -56,40 +58,40 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-ser
 /* FIELD ROWS */
 .fr{display:flex;justify-content:space-between;padding:4px 0;border-bottom:0.5px solid var(--border2);gap:6px}
 .fr:last-child{border-bottom:none}
-.fl{font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.07em;white-space:nowrap;font-family:'IBM Plex Mono',monospace;flex-shrink:0}
-.fv{font-size:10px;font-family:'IBM Plex Mono',monospace;text-align:right;word-break:break-all}
+.fl{font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.07em;white-space:nowrap;font-family:'Special Elite','Courier New',monospace;flex-shrink:0}
+.fv{font-size:10px;font-family:'Special Elite','Courier New',monospace;text-align:right;word-break:break-all}
 
 /* STATUS BAR */
-.sbar{display:flex;align-items:center;gap:8px;font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--muted);padding:6px 10px;background:var(--bg2);border:0.5px solid var(--border2);border-radius:var(--r);margin-bottom:10px}
+.sbar{display:flex;align-items:center;gap:8px;font-size:10px;font-family:'Special Elite','Courier New',monospace;color:var(--muted);padding:6px 10px;background:var(--bg2);border:0.5px solid var(--border2);border-radius:var(--r);margin-bottom:10px}
 .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
 .da{background:var(--red)}.db{background:var(--amber)}.dc{background:var(--green)}.dt{background:var(--teal)}
 
 /* METRICS */
 .mrow{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px}
 .met{background:var(--bg);border:0.5px solid var(--border2);border-radius:var(--r);padding:8px 10px}
-.ml{font-size:9px;text-transform:uppercase;letter-spacing:.09em;color:var(--dim);font-family:'IBM Plex Mono',monospace}
-.mv{font-size:15px;font-weight:500;margin-top:2px;font-family:'IBM Plex Mono',monospace}
+.ml{font-size:9px;text-transform:uppercase;letter-spacing:.09em;color:var(--dim);font-family:'Special Elite','Courier New',monospace}
+.mv{font-size:15px;font-weight:500;margin-top:2px;font-family:'Special Elite','Courier New',monospace}
 
 /* FORMS */
 .fg{display:grid;grid-template-columns:1fr 1fr;gap:7px}
 .ff{display:flex;flex-direction:column;gap:3px}
-.flb{font-size:9px;letter-spacing:.09em;text-transform:uppercase;color:var(--dim);font-family:'IBM Plex Mono',monospace}
-.fi{background:var(--bg);border:0.5px solid var(--border2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:11px;padding:6px 9px;border-radius:var(--r);outline:none;width:100%}
+.flb{font-size:9px;letter-spacing:.09em;text-transform:uppercase;color:var(--dim);font-family:'Special Elite','Courier New',monospace}
+.fi{background:var(--bg);border:0.5px solid var(--border2);color:var(--text);font-family:'Special Elite','Courier New',monospace;font-size:11px;padding:6px 9px;border-radius:var(--r);outline:none;width:100%}
 .fi:focus{border-color:var(--border)}
 
 /* TX TABLE */
-table.tx{width:100%;border-collapse:collapse;font-family:'IBM Plex Mono',monospace;font-size:10px;margin-bottom:8px;table-layout:fixed}
+table.tx{width:100%;border-collapse:collapse;font-family:'Special Elite','Courier New',monospace;font-size:10px;margin-bottom:8px;table-layout:fixed}
 table.tx th{font-size:8px;letter-spacing:.09em;text-transform:uppercase;color:var(--dim);font-weight:500;padding:5px 4px;border-bottom:0.5px solid var(--border);text-align:left;overflow:hidden}
 table.tx td{padding:3px 2px;border-bottom:0.5px solid var(--border2);vertical-align:middle;overflow:hidden}
 table.tx tr:last-child td{border-bottom:none}
-.ti{background:transparent;border:none;color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:10px;width:100%;padding:3px 2px;outline:none;min-width:0}
+.ti{background:transparent;border:none;color:var(--text);font-family:'Special Elite','Courier New',monospace;font-size:10px;width:100%;padding:3px 2px;outline:none;min-width:0}
 .ti:focus{background:rgba(255,255,255,.04);border-radius:3px}
-.ts{background:var(--bg);border:0.5px solid var(--border2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:9px;padding:3px 4px;border-radius:3px;cursor:pointer;width:100%}
+.ts{background:var(--bg);border:0.5px solid var(--border2);color:var(--text);font-family:'Special Elite','Courier New',monospace;font-size:9px;padding:3px 4px;border-radius:3px;cursor:pointer;width:100%}
 .tdel{background:transparent;border:none;color:var(--dim);cursor:pointer;font-size:13px;padding:2px 4px;line-height:1}
 .tdel:hover{color:var(--red)}
 
 /* NARRATIVE */
-.nb{background:var(--bg);border:0.5px solid var(--border2);border-radius:var(--r);padding:12px 14px;min-height:200px;font-family:'IBM Plex Mono',monospace;font-size:11px;line-height:1.75;color:var(--text);width:100%;resize:vertical;display:block;white-space:pre-wrap;box-sizing:border-box}
+.nb{background:var(--bg);border:0.5px solid var(--border2);border-radius:var(--r);padding:12px 14px;min-height:200px;font-family:'Special Elite','Courier New',monospace;font-size:11px;line-height:1.75;color:var(--text);width:100%;resize:vertical;display:block;white-space:pre-wrap;box-sizing:border-box}
 textarea.nb{outline:none}
 textarea.nb:focus{border-color:var(--border)}
 
@@ -98,10 +100,10 @@ textarea.nb:focus{border-color:var(--border)}
 .cr:last-child{border-bottom:none}
 .cr input{width:14px;height:14px;accent-color:var(--red);cursor:pointer;flex-shrink:0}
 .cl{font-size:11px;font-weight:500;cursor:pointer;flex:1}
-.crf{font-size:10px;color:var(--dim);font-family:'IBM Plex Mono',monospace;white-space:nowrap}
+.crf{font-size:10px;color:var(--dim);font-family:'Special Elite','Courier New',monospace;white-space:nowrap}
 
 /* BUTTONS */
-.btn{border:none;border-radius:var(--r);padding:9px 16px;font-size:11px;font-weight:500;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;letter-spacing:.03em;transition:opacity .15s}
+.btn{border:none;border-radius:var(--r);padding:9px 16px;font-size:11px;font-weight:500;cursor:pointer;font-family:'Archivo',system-ui,sans-serif;letter-spacing:.03em;transition:opacity .15s}
 .btn:disabled{opacity:.35;cursor:not-allowed}
 .btn-ghost{background:transparent;color:var(--muted);border:0.5px solid var(--border2)}
 .btn-ghost:hover:not(:disabled){border-color:var(--border);color:var(--text)}
@@ -129,11 +131,11 @@ textarea.nb:focus{border-color:var(--border)}
 ═══════════════════════════════ */
 .docs-page{max-width:780px}
 .docs-hero{padding:28px 0 24px;border-bottom:1px solid var(--border2);margin-bottom:28px}
-.docs-hero-kicker{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);margin-bottom:8px}
+.docs-hero-kicker{font-family:'Special Elite','Courier New',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);margin-bottom:8px}
 .docs-hero-title{font-size:26px;font-weight:500;line-height:1.15;margin-bottom:10px;letter-spacing:-.02em}
 .docs-hero-sub{font-size:13px;color:var(--muted);line-height:1.75;max-width:580px}
 .docs-section{margin-bottom:36px}
-.docs-section-title{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.docs-section-title{font-family:'Special Elite','Courier New',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);margin-bottom:14px;display:flex;align-items:center;gap:8px}
 .docs-section-title::after{content:'';flex:1;height:1px;background:rgba(20,184,130,.2)}
 .docs-h2{font-size:16px;font-weight:500;margin-bottom:8px;letter-spacing:-.01em}
 .docs-p{font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:12px}
@@ -145,7 +147,7 @@ textarea.nb:focus{border-color:var(--border)}
 .flow-step{display:flex;gap:16px;align-items:flex-start;position:relative}
 .flow-step::before{content:'';position:absolute;left:17px;top:36px;width:1px;height:calc(100% + 0px);background:var(--border2)}
 .flow-step:last-child::before{display:none}
-.flow-num{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;flex-shrink:0;margin-bottom:16px}
+.flow-num{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Special Elite','Courier New',monospace;font-size:11px;font-weight:600;flex-shrink:0;margin-bottom:16px}
 .fn-gray{background:var(--bg2);border:1px solid var(--border);color:var(--muted)}
 .fn-red{background:rgba(226,75,74,.15);border:1px solid rgba(226,75,74,.3);color:var(--red)}
 .fn-amber{background:rgba(239,159,39,.12);border:1px solid rgba(239,159,39,.3);color:var(--amber)}
@@ -154,14 +156,14 @@ textarea.nb:focus{border-color:var(--border)}
 .flow-content{flex:1;padding-bottom:4px}
 .flow-title{font-size:13px;font-weight:500;margin-bottom:3px;margin-top:6px}
 .flow-desc{font-size:12px;color:var(--muted);line-height:1.7}
-.flow-who{display:inline-flex;align-items:center;gap:5px;font-size:9px;font-family:'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:3px;margin-top:5px}
+.flow-who{display:inline-flex;align-items:center;gap:5px;font-size:9px;font-family:'Special Elite','Courier New',monospace;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:3px;margin-top:5px}
 .who-human{background:rgba(20,184,130,.1);color:var(--teal);border:0.5px solid rgba(20,184,130,.3)}
 .who-ai{background:rgba(239,159,39,.1);color:var(--amber);border:0.5px solid rgba(239,159,39,.3)}
 .who-both{background:rgba(255,255,255,.05);color:var(--muted);border:0.5px solid var(--border2)}
 
 /* HITL CALLOUT */
 .hitl-box{background:rgba(20,184,130,.06);border:1px solid rgba(20,184,130,.25);border-radius:var(--r);padding:16px 18px;margin:16px 0}
-.hitl-box-title{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.hitl-box-title{font-family:'Special Elite','Courier New',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:8px;display:flex;align-items:center;gap:6px}
 .hitl-box-title::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0}
 .hitl-box p{font-size:12px;color:rgba(232,228,218,0.6);line-height:1.75}
 .hitl-box p strong{color:var(--text)}
@@ -169,32 +171,32 @@ textarea.nb:focus{border-color:var(--border)}
 /* MOCK REPORT */
 .mock-report{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--r);overflow:hidden;margin:16px 0}
 .mock-report-header{background:var(--red);padding:8px 14px;display:flex;justify-content:space-between}
-.mock-report-header span{font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(255,255,255,.8);letter-spacing:.08em;text-transform:uppercase}
+.mock-report-header span{font-family:'Special Elite','Courier New',monospace;font-size:9px;color:rgba(255,255,255,.8);letter-spacing:.08em;text-transform:uppercase}
 .mock-report-body{padding:14px 16px}
-.mock-report-title{font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;margin-bottom:4px}
-.mock-report-ref{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:12px}
+.mock-report-title{font-family:'Special Elite','Courier New',monospace;font-size:14px;font-weight:600;margin-bottom:4px}
+.mock-report-ref{font-family:'Special Elite','Courier New',monospace;font-size:10px;color:var(--muted);margin-bottom:12px}
 .mock-divider{height:0.5px;background:var(--border2);margin:10px 0}
-.mock-sec-title{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);margin-bottom:6px;background:var(--bg3);padding:3px 6px;border-radius:3px;display:inline-block}
-.mock-kv{display:flex;justify-content:space-between;padding:3px 0;border-bottom:0.5px solid var(--border2);font-size:10px;font-family:'IBM Plex Mono',monospace}
+.mock-sec-title{font-family:'Special Elite','Courier New',monospace;font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);margin-bottom:6px;background:var(--bg3);padding:3px 6px;border-radius:3px;display:inline-block}
+.mock-kv{display:flex;justify-content:space-between;padding:3px 0;border-bottom:0.5px solid var(--border2);font-size:10px;font-family:'Special Elite','Courier New',monospace}
 .mock-kv:last-child{border-bottom:none}
 .mock-kv-key{color:var(--dim)}
-.mock-narrative{font-family:'IBM Plex Mono',monospace;font-size:10px;line-height:1.75;color:var(--muted);margin-top:6px}
+.mock-narrative{font-family:'Special Elite','Courier New',monospace;font-size:10px;line-height:1.75;color:var(--muted);margin-top:6px}
 .mock-nar-highlight{color:var(--teal)}
-.mock-tx-table{width:100%;border-collapse:collapse;font-family:'IBM Plex Mono',monospace;font-size:9px;margin-top:6px}
+.mock-tx-table{width:100%;border-collapse:collapse;font-family:'Special Elite','Courier New',monospace;font-size:9px;margin-top:6px}
 .mock-tx-table th{font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);padding:4px 5px;border-bottom:0.5px solid var(--border);text-align:left;background:rgba(0,0,0,.2)}
 .mock-tx-table td{padding:3px 5px;border-bottom:0.5px solid var(--border2);color:var(--muted)}
 .mock-checklist{margin-top:6px}
-.mock-check{display:flex;align-items:center;gap:6px;padding:4px 0;font-size:10px;font-family:'IBM Plex Mono',monospace}
+.mock-check{display:flex;align-items:center;gap:6px;padding:4px 0;font-size:10px;font-family:'Special Elite','Courier New',monospace}
 .mock-check-box{width:12px;height:12px;border-radius:2px;border:1px solid var(--green);background:rgba(99,153,34,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .mock-check-tick{color:var(--green);font-size:9px}
 .mock-check-text{color:var(--muted)}
 .mock-check-ref{color:var(--dim);margin-left:auto;font-size:9px}
-.mock-blocked{background:rgba(226,75,74,.08);border:0.5px solid rgba(226,75,74,.25);border-radius:3px;padding:5px 10px;font-size:10px;font-family:'IBM Plex Mono',monospace;color:#f08080;display:flex;align-items:center;gap:6px;margin-top:6px}
+.mock-blocked{background:rgba(226,75,74,.08);border:0.5px solid rgba(226,75,74,.25);border-radius:3px;padding:5px 10px;font-size:10px;font-family:'Special Elite','Courier New',monospace;color:#f08080;display:flex;align-items:center;gap:6px;margin-top:6px}
 .mock-blocked::before{content:'⊘';font-size:11px}
 
 /* RESPONSIBILITY TABLE */
 .resp-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:12px}
-.resp-table th{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);font-weight:500;padding:6px 10px;border-bottom:1px solid var(--border2);text-align:left;font-family:'IBM Plex Mono',monospace}
+.resp-table th{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);font-weight:500;padding:6px 10px;border-bottom:1px solid var(--border2);text-align:left;font-family:'Special Elite','Courier New',monospace}
 .resp-table td{padding:6px 10px;border-bottom:0.5px solid var(--border2);color:var(--muted)}
 .resp-table tr:last-child td{border-bottom:none}
 .resp-table td:first-child{color:var(--text)}
@@ -202,11 +204,108 @@ textarea.nb:focus{border-color:var(--border)}
 .resp-ai{color:var(--amber) !important}
 
 /* CODE BLOCK */
-.code-block{background:var(--bg);border:0.5px solid var(--border2);border-radius:var(--r);padding:12px 14px;font-family:'IBM Plex Mono',monospace;font-size:10px;line-height:1.75;color:rgba(232,228,218,0.6);margin:10px 0;overflow-x:auto}
+.code-block{background:var(--bg);border:0.5px solid var(--border2);border-radius:var(--r);padding:12px 14px;font-family:'Special Elite','Courier New',monospace;font-size:10px;line-height:1.75;color:rgba(232,228,218,0.6);margin:10px 0;overflow-x:auto}
 .code-comment{color:rgba(99,153,34,.7)}
 .code-key{color:var(--teal)}
 .code-val{color:var(--amber)}
 .code-str{color:rgba(232,228,218,.4)}
+
+/* ══════════ AML OPERATING SYSTEM THEME — paper, ink, red, yellow ══════════ */
+body{background:var(--paper)}
+body::before{content:"";position:fixed;inset:-50%;pointer-events:none;z-index:9999;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  opacity:.18;mix-blend-mode:multiply;animation:grain .5s steps(1) infinite}
+@keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-1%,-2%)}}
+@media(prefers-reduced-motion:reduce){body::before{animation:none}}
+
+/* header: ransom-note title */
+.topnav{border-bottom:3px solid var(--text);padding-bottom:16px}
+.topnav-left p{color:var(--red);font-family:'Permanent Marker',cursive;font-size:13px;letter-spacing:.02em;text-transform:none;font-weight:400;transform:rotate(-1.5deg);display:block;width:max-content;margin-bottom:6px}
+.topnav-left h1{font-family:'Archivo Black',sans-serif;font-weight:400;font-size:26px;text-transform:uppercase;letter-spacing:-.01em;
+  display:inline-block;background:var(--text);color:var(--bg);padding:2px 10px 0;transform:rotate(-1.5deg)}
+.nav-tab{border-radius:0;color:var(--muted);border:2px solid transparent;font-family:'Archivo Black',sans-serif;font-size:11px}
+.nav-tab:hover{background:transparent;color:var(--text);border-color:var(--text)}
+.nav-tab.active,.nav-tab.docs-tab.active{background:var(--yellow);color:var(--text);border-color:var(--text);box-shadow:3px 3px 0 var(--text)}
+
+/* step bar */
+.steps{border:2px solid var(--text);border-radius:0;box-shadow:4px 4px 0 var(--text)}
+.step{background:var(--bg);border-right:2px solid var(--text);color:var(--dim)}
+.step.active{background:var(--yellow);color:var(--text);font-weight:400;font-family:'Archivo Black',sans-serif}
+.step.done{color:var(--green)}
+
+/* panels = paper cards with hard shadow */
+.panel{background:var(--bg);border:2px solid var(--text);border-radius:0;box-shadow:4px 5px 0 var(--text)}
+.pt{color:var(--red);font-family:'Archivo Black',sans-serif;font-size:11px;letter-spacing:.06em}
+.ac{border:1.5px solid var(--border2);border-radius:0;transition:transform .18s steps(3,end),box-shadow .18s steps(3,end)}
+.ac:hover{border-color:var(--text);transform:translate(-2px,-2px);box-shadow:3px 3px 0 var(--text)}
+.ac.sel{border:2px solid var(--red);box-shadow:3px 3px 0 var(--red)}
+.tag{border-radius:0}
+.t-r{background:rgba(228,22,27,.1);border-color:var(--red)}
+.t-a{background:rgba(255,214,10,.35);color:var(--text);border-color:#b98900}
+.t-g{background:rgba(31,122,58,.1);border-color:var(--green)}
+.t-t{background:rgba(31,122,58,.1);border-color:var(--green)}
+.sbar,.met,.fi,.ts,.nb{border-radius:0}
+.sbar{background:var(--bg);border:1.5px dashed var(--text)}
+.met{border:1.5px solid var(--text)}
+.mv{font-family:'Archivo Black',sans-serif;font-weight:400}
+.fi:focus,textarea.nb:focus{border-color:var(--text);box-shadow:3px 3px 0 var(--yellow)}
+.ti:focus{background:rgba(255,214,10,.25);border-radius:0}
+table.tx th{border-bottom:2px solid var(--text);color:var(--text)}
+.nb{border:1.5px solid var(--text)}
+
+/* buttons: stamp-like, pop on hover */
+.btn{border-radius:0;font-family:'Archivo Black',sans-serif;font-weight:400;letter-spacing:.04em;text-transform:uppercase;font-size:11px;
+  border:2px solid var(--text)!important;transition:transform .15s steps(2,end),box-shadow .15s steps(2,end)}
+.btn:hover:not(:disabled){opacity:1!important;transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--text)}
+.btn-ghost{background:var(--bg);color:var(--text)}
+.btn-solid{background:var(--text);color:var(--yellow)}
+.btn-red{background:var(--red);color:#fff}
+.btn-green{background:var(--yellow);color:var(--text)}
+
+/* banners */
+.bn{border-radius:0}
+.be{background:rgba(228,22,27,.08);color:var(--red);border:2px solid var(--red)}
+.bs{background:rgba(255,214,10,.3);color:var(--text);border:2px solid var(--text)}
+.sp{border-color:var(--border2);border-top-color:var(--red)}
+
+/* docs page */
+.docs-hero{border-bottom:3px solid var(--text)}
+.docs-hero-kicker,.docs-section-title{color:var(--red);font-family:'Permanent Marker',cursive;font-size:14px;letter-spacing:.02em;text-transform:none}
+.docs-section-title::after{background:var(--text);height:2px}
+.docs-hero-title{font-family:'Archivo Black',sans-serif;font-weight:400;text-transform:uppercase;font-size:30px}
+.docs-h2{font-family:'Archivo Black',sans-serif;font-weight:400}
+.docs-p strong{font-weight:700}
+.docs-p a{color:var(--red);text-decoration:underline;text-decoration-color:var(--yellow);text-decoration-thickness:3px}
+.flow-step::before{background:var(--text);width:2px}
+.flow-num{border-radius:0;font-family:'Archivo Black',sans-serif;font-weight:400;border:2px solid var(--text)!important;background:var(--bg)!important;color:var(--text)!important}
+.fn-red{background:var(--red)!important;color:#fff!important}
+.fn-amber,.fn-teal{background:var(--yellow)!important}
+.flow-title{font-weight:700}
+.flow-who{border-radius:0}
+.who-human{background:rgba(228,22,27,.08);color:var(--red);border:1.5px solid var(--red)}
+.who-ai{background:rgba(255,214,10,.4);color:var(--text);border:1.5px solid var(--text)}
+.who-both{background:var(--bg3);color:var(--text);border:1.5px solid var(--border2)}
+.hitl-box{background:rgba(255,214,10,.22);border:2px solid var(--text);border-radius:0;box-shadow:4px 4px 0 var(--red)}
+.hitl-box-title{color:var(--red);font-family:'Archivo Black',sans-serif}
+.hitl-box-title::before{background:var(--red)}
+.hitl-box p{color:var(--muted)}
+.mock-report{border:2px solid var(--text);border-radius:0;box-shadow:5px 5px 0 var(--text)}
+.mock-report-header{background:var(--text)}
+.mock-report-header span{color:var(--yellow)}
+.mock-sec-title{border-radius:0;background:var(--yellow);color:var(--text)}
+.mock-nar-highlight{color:var(--red);background:rgba(255,214,10,.35)}
+.mock-tx-table th{background:var(--bg3)}
+.mock-blocked{border-radius:0;color:var(--red);background:rgba(228,22,27,.06);border:1.5px solid var(--red)}
+.resp-table th{border-bottom:2px solid var(--text);color:var(--text)}
+.resp-human{color:var(--red)!important}
+.resp-ai{color:#8a6a00!important}
+.code-block{border-radius:0;background:#1a1712;color:#e8e2d2;border:2px solid var(--text)}
+.code-comment{color:#9fbf6a}.code-key{color:var(--yellow)}.code-val{color:#ff8a70}.code-str{color:#c9c2b0}
+
+/* link back to the system map */
+.aos-back{position:fixed;right:16px;bottom:14px;z-index:10000;font-family:'Archivo Black',sans-serif;font-size:12px;letter-spacing:.03em;
+  text-decoration:none;color:#fffdf8;background:#141414;padding:7px 11px 6px;transform:rotate(-2deg);box-shadow:3px 3px 0 #e4161b;transition:transform .15s steps(2,end)}
+.aos-back:hover{transform:rotate(-2deg) translate(-2px,-2px);box-shadow:5px 5px 0 #e4161b}
 </style>
 
 <div id="root"></div>
@@ -267,7 +366,7 @@ function exportPDF(sub,txRows,nar,alert){
   doc.setFontSize(15);doc.setFont('helvetica','bold');doc.setTextColor(20,20,20);
   doc.text('SUSPICIOUS ACTIVITY REPORT',M,y);y+=6;
   doc.setFontSize(8);doc.setFont('helvetica','normal');doc.setTextColor(120,120,120);
-  doc.text('Ref: '+ref+'  ·  Filed: '+today,M,y);y+=5;
+  doc.text('Ref: '+ref+'  ·  Draft prepared: '+today+'  ·  Not filed',M,y);y+=5;
   doc.setDrawColor(226,75,74);doc.setLineWidth(0.4);doc.line(M,y,W-M,y);y+=7;
   /* Section helper */
   const sec=t=>{doc.setFillColor(245,245,242);doc.rect(M,y,CW,5.5,'F');doc.setFontSize(7.5);doc.setFont('helvetica','bold');doc.setTextColor(80,80,80);doc.text(t.toUpperCase(),M+2,y+3.8);y+=8;};
@@ -297,16 +396,16 @@ function exportPDF(sub,txRows,nar,alert){
     .forEach(f=>{if(y>272){doc.addPage();y=16;}doc.text('• '+f,M+2,y);y+=5;});y+=4;
   if(y>240){doc.addPage();y=16;}
   sec('6. Typologies');
-  [alert.mixer==='YES'&&'Mixer / Tumbling: Consistent with layering stage of ML. Obfuscates on-chain origin-destination link.',alert.sow==='NO'&&'Unexplained Wealth: Failure to substantiate SoF is a primary indicator of illicit origin under EU AMLD EDD.',alert.adverseMedia==='YES'&&'Adverse Media: OSINT linking subject to sanctioned entities is a significant risk indicator under RBA.','Cross-Border Crypto-to-Fiat: Consistent with integration stage, especially combined with mixer exposure.'].filter(Boolean)
+  [alert.mixer==='YES'&&'Mixer / Tumbling: Consistent with layering stage of ML. Obfuscates on-chain origin-destination link.',alert.sow==='NO'&&'Unexplained Wealth: Failure to substantiate SoF/SoW is a recognised EDD red flag.',alert.adverseMedia==='YES'&&'Adverse Media: OSINT linking subject to sanctioned entities is a significant risk indicator under RBA.','Cross-Border Crypto-to-Fiat: Consistent with integration stage, especially combined with mixer exposure.'].filter(Boolean)
     .forEach(t=>{if(y>265){doc.addPage();y=16;}doc.splitTextToSize('• '+t,CW-4).forEach(l=>{doc.text(l,M+2,y);y+=4.5;});y+=2;});y+=4;
   if(y>240){doc.addPage();y=16;}
   sec('7. Additional Information');kv('Evidence','TM alert data, OSINT report, adverse media records');kv('Connected Parties',sub.name||'—');kv('Public Records',alert.osint);y+=2;
-  sec('8. Escalation');kv('Account','Hold pending investigation');kv('EDD Initiated','Yes — '+today);kv('FIU Referral','Pending MLRO sign-off');y+=2;
+  sec('8. Escalation');kv('Account action','______________________ (officer)');kv('EDD initiated','Yes / No — date: __________');kv('FIU referral','Pending MLRO decision');y+=2;
   if(y>240){doc.addPage();y=16;}
-  sec('9. Recommendation');
-  doc.setFontSize(9);doc.setFont('helvetica','bold');doc.setTextColor(226,75,74);doc.text('RECOMMEND SAR FILING',M+2,y);y+=6;
+  sec('9. Decision');
+  doc.setFontSize(8);doc.setFont('helvetica','bold');doc.setTextColor(20,20,20);doc.text('DECISION (officer / MLRO):  [  ] File SAR    [  ] Do not file    [  ] More information needed',M+2,y);y+=6;
   doc.setFontSize(8);doc.setFont('helvetica','normal');doc.setTextColor(40,40,40);
-  doc.splitTextToSize('Based on unverified Source of Wealth'+(alert.mixer==='YES'?', confirmed crypto mixer exposure':'')+', adverse media findings, and transaction profile inconsistent with declared business model — there are reasonable grounds to suspect money laundering. SAR filing recommended to national FIU per applicable AML/CTF obligations.',CW-4).forEach(l=>{if(y>272){doc.addPage();y=16;}doc.text(l,M+2,y);y+=4.8;});y+=6;
+  doc.splitTextToSize('Rationale (completed by the officer, not generated): ______________________________________________________________________________________________________________________________________________',CW-4).forEach(l=>{if(y>272){doc.addPage();y=16;}doc.text(l,M+2,y);y+=6;});y+=6;
   if(y>230){doc.addPage();y=16;}
   sec('10. Signatures');
   doc.setFontSize(7.5);doc.setFont('helvetica','normal');doc.setTextColor(80,80,80);
@@ -329,8 +428,8 @@ function DocsPage(){
     /* HERO */
     h('div',{className:'docs-hero'},
       h('div',{className:'docs-hero-kicker'},'Technical Documentation · ajatau AML'),
-      h('div',{className:'docs-hero-title'},'Agentic SAR Generator'),
-      h('p',{className:'docs-hero-sub'},'A 6-step compliance workflow that combines structured data entry, AI-assisted narrative drafting, and mandatory human validation before producing a regulator-ready Suspicious Activity Report (SAR/STR) in PDF format.')
+      h('div',{className:'docs-hero-title'},'SAR Draft Automation'),
+      h('p',{className:'docs-hero-sub'},'A 6-step compliance workflow that combines structured data entry, AI-assisted narrative drafting, and mandatory human validation before exporting a draft Suspicious Activity Report (SAR/STR) as a PDF for officer and MLRO sign-off.')
     ),
 
     /* HOW IT WORKS */
@@ -360,7 +459,7 @@ function DocsPage(){
           h('div',{className:'flow-num fn-gray'},'3'),
           h('div',{className:'flow-content'},
             h('div',{className:'flow-title'},'Enter Transactions'),
-            h('div',{className:'flow-desc'},'Editable table. Officer enters each suspicious and related transaction: date, amount, currency (EUR/USD/BTC/ETH/USDT), sender, receiver, payment method, and notes. Rows can be added and removed. These exact values are passed to Claude and printed in the PDF table — Claude does not invent transaction data.'),
+            h('div',{className:'flow-desc'},'Editable table. Officer enters each suspicious and related transaction: date, amount, currency (EUR/USD/BTC/ETH/USDT), sender, receiver, payment method, and notes. Rows can be added and removed. These exact values are passed to Claude and printed in the PDF table. The AI is told to use only these values, but the officer still checks every amount and date in the draft.'),
             h('span',{className:'flow-who who-human'},'● Human')
           )
         ),
@@ -369,7 +468,7 @@ function DocsPage(){
           h('div',{className:'flow-num fn-amber'},'4'),
           h('div',{className:'flow-content'},
             h('div',{className:'flow-title'},'AI Generates Narrative Draft'),
-            h('div',{className:'flow-desc'},'Claude receives all officer-entered data and generates a 3-paragraph Statement of Facts: (1) chronological suspicious activity referencing real amounts and dates, (2) investigative findings cross-referencing OSINT with AMLD6/MiCA articles, (3) compliance decision with regulatory citations. This is a first draft — not a final document.'),
+            h('div',{className:'flow-desc'},'Claude receives all officer-entered data and generates a 3-paragraph Statement of Facts: (1) chronological suspicious activity referencing real amounts and dates, (2) investigative findings linking the OSINT to the transaction pattern and typology, (3) the factors for and against filing. The filing decision and any legal references are added by the officer. This is a first draft — not a final document.'),
             h('span',{className:'flow-who who-ai'},'◆ AI (Claude)')
           )
         ),
@@ -378,7 +477,7 @@ function DocsPage(){
           h('div',{className:'flow-num fn-teal'},'5'),
           h('div',{className:'flow-content'},
             h('div',{className:'flow-title'},'Human Review & 2LoD Validation ← Critical Gate'),
-            h('div',{className:'flow-desc'},'The narrative appears in an editable textarea. The officer reads every sentence, corrects inaccuracies, and ticks 4 regulatory checkboxes. The export button is programmatically disabled until all 4 are checked. This gate cannot be bypassed.'),
+            h('div',{className:'flow-desc'},'The narrative appears in an editable textarea. The officer reads every sentence, corrects inaccuracies, and ticks 4 regulatory checkboxes. The export button is programmatically disabled until all 4 are checked. The gate is enforced in the app’s code, not just shown as a reminder.'),
             h('span',{className:'flow-who who-human'},'● Human — export blocked until complete')
           )
         ),
@@ -401,14 +500,14 @@ function DocsPage(){
         h('div',{className:'hitl-box-title'},'The core principle'),
         h('p',null,'This tool does not file reports. It drafts them. Every factual input comes from a human officer. Every output is reviewed and approved by a human officer. The AI generates one thing — a structured starting point for the narrative. The officer owns everything else.')
       ),
-      h('p',{className:'docs-p'},'The 2LoD checklist in Step 5 maps to real regulatory obligations. Each checkbox is a legal confirmation, not a UI nicety:'),
+      h('p',{className:'docs-p'},'Each checkbox in the Step 5 checklist is tied to the obligation it evidences (EU references are to Directive (EU) 2015/849, AMLD4):'),
       h('table',{className:'resp-table'},
         h('thead',null,h('tr',null,h('th',null,'Checkbox'),h('th',null,'Regulatory basis'),h('th',null,'What the officer confirms'))),
         h('tbody',null,
-          [['Proof of Funds / Wealth verified','AML Art. 8(3)','SoF/SoW documentation reviewed and on file'],
-           ['KYC confirmed','AMLD6 §13','Identity and residency documents verified'],
-           ['MiCA crypto exposure reviewed','MiCA Reg. 2023/1114','Crypto asset exposure assessed under MiCA framework'],
-           ['OFAC / Sanctions re-confirmed','OFAC 31 CFR','Sanctions screening re-run, result recorded']]
+          [['Proof of Funds / Wealth verified','AMLD4 Art. 13(1)(d), 18','SoF/SoW documentation reviewed and on file'],
+           ['KYC confirmed','AMLD4 Art. 13(1)(a)','Identity and residency documents verified'],
+           ['Crypto exposure reviewed','AMLD4 Art. 18(2)','Mixer / unhosted-wallet exposure examined as unusual or complex activity'],
+           ['OFAC / Sanctions re-confirmed','OFAC 31 CFR Ch. V','Sanctions screening re-run, result recorded']]
             .map(([a,b,c])=>h('tr',{key:a},h('td',null,a),h('td',{className:'resp-human'},b),h('td',null,c)))
         )
       ),
@@ -439,7 +538,7 @@ function DocsPage(){
            ['Correct inaccuracies in the narrative','Human'],
            ['Confirm PoF/W verification','Human'],
            ['Confirm KYC validation','Human'],
-           ['Confirm MiCA crypto review','Human'],
+           ['Confirm crypto exposure review','Human'],
            ['Confirm OFAC re-screening','Human'],
            ['Approve and download PDF','Human'],
            ['MLRO countersignature','Senior Human Officer'],
@@ -464,7 +563,7 @@ function DocsPage(){
         ),
         h('div',{className:'mock-report-body'},
           h('div',{className:'mock-report-title'},'SUSPICIOUS ACTIVITY REPORT'),
-          h('div',{className:'mock-report-ref'},'Ref: SAR/CUST-NORDIC-772/2026  ·  Filed: 14 November 2025'),
+          h('div',{className:'mock-report-ref'},'Ref: SAR/CUST-NORDIC-772/2026  ·  Draft exported: 14 November 2025'),
           h('div',{className:'mock-divider'}),
           h('div',{className:'mock-sec-title'},'2. Subject Information'),
           ...[['Full Name','Erik Lindqvist'],['Date of Birth','1982-04-17'],['Address','Sveavägen 48, 111 34 Stockholm, Sweden'],['Account ID','CUST-NORDIC-772'],['OFAC Status','Clear']].map(([k,v])=>
@@ -479,10 +578,10 @@ function DocsPage(){
             '. The funds were routed through a cryptocurrency mixing protocol prior to deposit, a technique consistent with deliberate obfuscation of the transaction origin trail...',
             h('br'),h('br'),
             h('span',{className:'mock-nar-highlight'},'[Paragraph 2 — Investigative Findings] '),
-            'OSINT review confirms negative media coverage in Swedish outlets linking the subject to sanctioned entities. Under AMLD6 Article 33 and MiCA Regulation 2023/1114, the absence of Source of Wealth verification for a customer exhibiting high-risk crypto exposure constitutes a mandatory SAR trigger...',
+            'OSINT review found negative media coverage in Swedish outlets linking the subject to sanctioned entities. Source of Wealth remains unverified while the account shows high-risk crypto exposure, and the transaction profile does not match the declared business...',
             h('br'),h('br'),
-            h('span',{className:'mock-nar-highlight'},'[Paragraph 3 — Compliance Decision] '),
-            'Based on the totality of findings — unverified SoW, confirmed mixer exposure, and adverse media — it is the determination of this officer that a Suspicious Transaction Report should be filed with the Financial Intelligence Unit...'
+            h('span',{className:'mock-nar-highlight'},'[Paragraph 3 — Filing Considerations] '),
+            'Factors for filing: unverified SoW, mixer exposure, adverse media. Factors against: none identified in the file. The filing decision is made by the officer and MLRO, not by the AI...'
           ),
           h('div',{className:'mock-divider'}),
           h('div',{className:'mock-sec-title'},'4. Transaction Information'),
@@ -499,10 +598,10 @@ function DocsPage(){
           h('div',{className:'mock-divider'}),
           h('div',{className:'mock-sec-title'},'Step 5 — 2LoD Validation Gate (before export)'),
           h('div',{className:'mock-checklist'},
-            [['Proof of Funds / Wealth verified','AML Art. 8(3)'],
-             ['KYC confirmed — identity & residency','AMLD6 §13'],
-             ['MiCA crypto exposure & media review','MiCA 2023/1114'],
-             ['OFAC / sanctions re-confirmed','OFAC 31 CFR']]
+            [['Proof of Funds / Wealth verified','AMLD4 Art. 13(1)(d), 18'],
+             ['KYC confirmed — identity & residency','AMLD4 Art. 13(1)(a)'],
+             ['Crypto exposure & media review','AMLD4 Art. 18(2)'],
+             ['OFAC / sanctions re-confirmed','OFAC 31 CFR Ch. V']]
               .map(([l,r])=>h('div',{key:l,className:'mock-check'},
                 h('div',{className:'mock-check-box'},h('span',{className:'mock-check-tick'},'✓')),
                 h('span',{className:'mock-check-text'},l),
@@ -519,7 +618,7 @@ function DocsPage(){
     /* HOW DATA FLOWS */
     h('div',{className:'docs-section'},
       h('div',{className:'docs-section-title'},'How data flows to Claude'),
-      h('p',{className:'docs-p'},'The AI receives only what the officer enters. Nothing is invented or assumed. The prompt is constructed at generation time:'),
+      h('p',{className:'docs-p'},'The AI receives only what the officer enters. It can still misstate or add details, which is why Step 5 exists. The prompt is constructed at generation time:'),
       h('div',{className:'code-block'},
         h('span',{className:'code-comment'},'// Transaction rows are serialised before sending\n'),
         h('span',{className:'code-key'},'const '),h('span',null,'txStr = txRows\n  .filter(r => r.date || r.amount || r.sender)\n  .map(r => `Date:${r.date} Amount:${r.amount} ${r.ccy} ...`)\n  .join("\\n");\n\n'),
@@ -539,6 +638,7 @@ function DocsPage(){
         h('tbody',null,
           [['Claude can hallucinate','The narrative may contain plausible but inaccurate details. Step 5 review exists specifically to catch this. Never submit without reading.'],
            ['No real TM integration','Alerts are hardcoded. Production would pull from a live TM system feed.'],
+           ['No sanctions screening or SQL','OFAC status on the sample alerts is a fixed value. Screening and TM rules are on the roadmap, not built.'],
            ['No audit log','The app does not record who reviewed what. Production use requires an audit trail.'],
            ['No FIU submission','PDF is downloaded for manual submission. Direct FIU API filing is not implemented.'],
            ['No persistent storage','Nothing is saved between sessions. Refresh = start over.']]
@@ -548,7 +648,7 @@ function DocsPage(){
     ),
 
     h('div',{style:{paddingTop:24,borderTop:'1px solid var(--border2)',marginTop:8}},
-      h('p',{style:{fontFamily:'IBM Plex Mono,monospace',fontSize:10,color:'var(--dim)'}},
+      h('p',{style:{fontFamily:'Special Elite,Courier New,monospace',fontSize:10,color:'var(--dim)'}},
         'Built by Gintarė Jatautytė · AML & FinCrime Compliance · ajatauaml.com · Second Line of Defence'
       )
     )
@@ -593,8 +693,10 @@ ${txStr}
 
 Write exactly 3 professional paragraphs (no headings, no bullets):
 1. STATEMENT OF FACTS: Chronological suspicious activity. Reference actual dates/amounts from the transactions above. Explain why the mixer flag indicates fund obfuscation.
-2. INVESTIGATIVE FINDINGS: Cross-reference OSINT with AMLD6/MiCA. Analyse SoW failure against business model complexity. Cite specific regulatory articles.
-3. COMPLIANCE DECISION: State whether SAR filing is recommended. Cite OFAC status, PEP status, AMLD6 Art. 33. Be definitive.`;
+2. INVESTIGATIVE FINDINGS: Link the OSINT to the transaction pattern and the likely typology. Analyse the SoW gap against business model complexity. Do not cite article numbers or legal provisions; the officer adds references.
+3. FILING CONSIDERATIONS: Summarise the factors for and against filing, including OFAC and PEP status. Do not make or recommend the filing decision; the officer and MLRO decide.
+
+Use only facts given above. If something is unknown, say it is unknown.`;
     try{
       const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
       const raw=await res.text();
@@ -645,7 +747,7 @@ Write exactly 3 professional paragraphs (no headings, no bullets):
     ),
     h('div',{className:'panel'},
       h('p',{className:'pt'},'OSINT'),
-      h('p',{style:{fontFamily:'IBM Plex Mono,monospace',fontSize:11,lineHeight:1.7,color:'var(--muted)',margin:0}},alert.osint)
+      h('p',{style:{fontFamily:'Special Elite,Courier New,monospace',fontSize:11,lineHeight:1.7,color:'var(--muted)',margin:0}},alert.osint)
     ),
     h('div',{className:'btn-row'},
       h('button',{className:'btn btn-ghost',onClick:fillDummy},'⚡ Fill test data'),
@@ -698,10 +800,10 @@ Write exactly 3 professional paragraphs (no headings, no bullets):
     ),
     h('div',{className:'panel',style:{marginBottom:8}},
       h('p',{className:'pt'},'2LoD Validation Checklist — all required before export'),
-      [['pof','Proof of Funds / Wealth verified','AML Art. 8(3)'],
-       ['kyc','KYC confirmed — identity & residency','AMLD6 §13'],
-       ['mica','MiCA crypto exposure & media review','MiCA 2023/1114'],
-       ['ofac','OFAC / sanctions re-confirmed','OFAC 31 CFR']]
+      [['pof','Proof of Funds / Wealth verified','AMLD4 Art. 13(1)(d), 18'],
+       ['kyc','KYC confirmed — identity & residency','AMLD4 Art. 13(1)(a)'],
+       ['mica','Crypto exposure & media review','AMLD4 Art. 18(2)'],
+       ['ofac','OFAC / sanctions re-confirmed','OFAC 31 CFR Ch. V']]
         .map(([k,l,r])=>h('div',{key:k,className:'cr'},
           h('input',{type:'checkbox',id:'c'+k,checked:chk[k],onChange:e=>setChk(c=>({...c,[k]:e.target.checked}))}),
           h('label',{htmlFor:'c'+k,className:'cl'},l),
@@ -718,10 +820,10 @@ Write exactly 3 professional paragraphs (no headings, no bullets):
   );
 
   if(phase==='exported')right=h('div',null,
-    h('div',{className:'bn bs'},'✓ SAR_'+alert.id+'.pdf downloaded'),
+    h('div',{className:'bn bs'},'✓ SAR_'+alert.id+'_'+new Date().toISOString().split('T')[0]+'.pdf downloaded (draft, not filed)'),
     h('div',{className:'panel'},
       h('p',{className:'pt'},'Export Summary'),
-      [['Reference','SAR/'+alert.id+'/2026'],['Subject',sub.name||'—'],['Transactions',txRows.filter(r=>r.date||r.amount).length+' rows'],['2LoD Checks','PoF/W ✓  KYC ✓  MiCA ✓  OFAC ✓'],['Decision','RECOMMEND SAR FILING'],['Filed',new Date().toLocaleDateString('en-GB')]]
+      [['Reference','SAR/'+alert.id+'/2026'],['Subject',sub.name||'—'],['Transactions',txRows.filter(r=>r.date||r.amount).length+' rows'],['2LoD Checks','PoF/W ✓  KYC ✓  Crypto ✓  OFAC ✓'],['Decision','Pending officer / MLRO'],['Exported',new Date().toLocaleDateString('en-GB')]]
         .map(([k,v])=>h('div',{key:k,className:'fr'},h('span',{className:'fl'},k),h('span',{className:'fv'},v)))
     ),
     h('div',{className:'btn-row'},
@@ -746,7 +848,7 @@ function Root(){
     h('div',{className:'topnav'},
       h('div',{className:'topnav-left'},
         h('p',null,'Anti-Money Laundering · Second Line of Defence'),
-        h('h1',null,'Agentic SAR Generator')
+        h('h1',null,'SAR Draft Automation')
       ),
       h('div',{className:'nav-tabs'},
         h('button',{className:'nav-tab'+(view==='app'?' active':''),onClick:()=>setView('app')},'SAR Generator'),
