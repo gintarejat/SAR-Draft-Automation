@@ -8,7 +8,7 @@
 
 A 6-step web application that assists AML compliance officers in drafting, reviewing, and exporting Suspicious Activity Reports (SAR/STR). It combines a structured data-entry workflow with one AI call that drafts the narrative, a mandatory human validation checkpoint, and a PDF export.
 
-It is a workflow tool, not an AI agent: the model is called once, with no tools and no loop.
+**What kind of AI this is:** workflow automation with LLM-assisted drafting (autonomy level: draft). It is not an AI agent: the model is called once, with no tools and no loop, and it never makes the filing decision.
 
 **This tool does not file reports. It drafts them.**
 Every output requires a human compliance officer to review, edit, and approve before any regulatory action is taken. The AI generates a starting point — the officer owns the final document.
