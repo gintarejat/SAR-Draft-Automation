@@ -812,11 +812,11 @@ function PlacePage(){
             h('div',{className:'flow-content'},h('div',{className:'flow-title'},t),h('div',{className:'flow-desc'},d),h('span',{className:'flow-who who-human'},'● Human')))))
     ),
     h('div',{className:'docs-section'},
-      h('div',{className:'docs-section-title'},'Why this layer matters to employers'),
+      h('div',{className:'docs-section-title'},'Why this layer matters'),
       h('div',{className:'hitl-box'},
         h('div',{className:'hitl-box-title'},'From workflow shape to alert-to-report chain'),
-        h('p',null,'The Sumsub RFP blueprint puts ',B('80–90% of TM cost in manual review time'),' and benchmarks ',B('80–85% FIU fields auto-filled'),' with ',B('mandatory MLRO digital sign-off'),'. This tool shows the workflow shape. The planned changes (TM Lab feed, computed indicators, FIU map, audit log) turn it into the full alert-to-report chain, with the human decision recorded rather than pre-written.')),
-      h('p',{className:'caveat'},'Benchmarks are from Sumsub\'s own vendor material. Treat them as buyer expectations, not independent industry data.')
+        h('p',null,'Layer 5 is where monitoring turns into a decision that can be defended. Most of the work here is manual: reading the alert, gathering the evidence, writing the narrative, getting it signed off. It is also where the ',B('human judgement has to stay visible'),': an FIU reads a SAR as the officer\'s statement, and the MLRO owns the filing decision.'),
+        h('p',{style:{marginTop:8}},'This tool shows the shape of that workflow: the facts come from the officer, the AI drafts the prose, and every consequential step stays human. The planned changes (TM Lab feed, computed indicators, FIU field map, audit log) turn it into the full alert-to-report chain, with the ',B('human decision recorded rather than pre-written'),'.'))
     ),
     pageFoot()
   );
