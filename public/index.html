@@ -302,6 +302,32 @@ table.tx th{border-bottom:2px solid var(--text);color:var(--text)}
 .code-block{border-radius:0;background:#1a1712;color:#e8e2d2;border:2px solid var(--text)}
 .code-comment{color:#9fbf6a}.code-key{color:var(--yellow)}.code-val{color:#ff8a70}.code-str{color:#c9c2b0}
 
+/* guide + AML OS pages */
+.topnav{flex-wrap:wrap;gap:12px}
+.nav-tabs{flex-wrap:wrap}
+.guide-steps{margin:0 0 26px;box-shadow:none}
+.guide-steps .step{color:var(--text)}
+.howto-list{margin:4px 0 6px 20px;font-size:12px;color:var(--muted);line-height:1.75}
+.howto-list li{padding-left:2px}
+.howto-list strong,.docs-list strong{color:var(--text);font-weight:700}
+.howto-tip{display:block;margin-top:3px;font-family:'Permanent Marker',cursive;font-size:12px;color:var(--red)}
+.docs-list{margin:0 0 8px 18px;font-size:13px;color:var(--muted);line-height:1.8}
+code.inl{font-family:'Special Elite','Courier New',monospace;font-size:11px;background:var(--bg3);border:1px solid var(--border2);padding:0 4px}
+.tbl-wrap{overflow-x:auto}
+.resp-table .tag{white-space:nowrap}
+.layer-map{list-style:none;background:var(--bg);border:2px solid var(--text);box-shadow:4px 5px 0 var(--text);margin:14px 0 6px}
+.lm-row{display:flex;align-items:center;gap:12px;padding:9px 14px;border-bottom:1.5px solid var(--border2)}
+.lm-row:last-child{border-bottom:none}
+.lm-num{font-family:'Archivo Black',sans-serif;font-size:20px;color:var(--red);width:18px;flex-shrink:0}
+.lm-name{font-family:'Archivo Black',sans-serif;font-size:12px;text-transform:uppercase;flex:1}
+.lm-tool{font-family:'Special Elite','Courier New',monospace;font-size:11px;text-align:right}
+.lm-row.here{background:var(--yellow)}
+.lm-row.here .lm-tool{font-family:'Archivo Black',sans-serif;background:var(--text);color:var(--yellow);padding:2px 8px;transform:rotate(-1.5deg)}
+.lm-row.planned .lm-tool{border:1.5px dashed var(--dim);color:var(--muted);padding:1px 7px}
+.lm-row.none .lm-num,.lm-row.none .lm-name,.lm-row.none .lm-tool{color:var(--dim)}
+.docs-hero-sub a{color:var(--red);text-decoration:underline;text-decoration-color:var(--yellow);text-decoration-thickness:3px}
+.caveat{font-size:11px;color:var(--dim);margin-top:8px;line-height:1.6}
+
 /* link back to the system map */
 .aos-back{position:fixed;right:16px;bottom:14px;z-index:10000;font-family:'Archivo Black',sans-serif;font-size:12px;letter-spacing:.03em;
   text-decoration:none;color:#fffdf8;background:#141414;padding:7px 11px 6px;transform:rotate(-2deg);box-shadow:3px 3px 0 #e4161b;transition:transform .15s steps(2,end)}
@@ -656,6 +682,147 @@ function DocsPage(){
 }
 
 /* ══════════════════════════════════════
+   HOW TO USE + PLACE IN AML OS PAGES
+══════════════════════════════════════ */
+const B=t=>h('strong',null,t);
+const C=t=>h('code',{className:'inl'},t);
+const STATUS={ok:['t-g','✓ Built'],part:['t-a','⚠ Partial'],no:['t-r','✗ Not built']};
+const tbl=(head,rows)=>h('div',{className:'tbl-wrap'},h('table',{className:'resp-table'},
+  h('thead',null,h('tr',null,...head.map(x=>h('th',{key:x},x)))),
+  h('tbody',null,...rows.map((r,i)=>h('tr',{key:i},...r.map((c,j)=>h('td',{key:j},...[].concat(c))))))));
+const pageFoot=()=>h('div',{style:{paddingTop:24,borderTop:'1px solid var(--border2)',marginTop:8}},
+  h('p',{style:{fontFamily:'Special Elite,Courier New,monospace',fontSize:10,color:'var(--dim)'}},
+    'Built by Gintarė Jatautytė · AML & FinCrime Compliance · ajatauaml.com · Second Line of Defence'));
+const gstep=(n,cls,title,who,whoCls,body)=>h('div',{className:'flow-step'},
+  h('div',{className:'flow-num '+cls},n),
+  h('div',{className:'flow-content'},h('div',{className:'flow-title'},title),body,h('span',{className:'flow-who '+whoCls},who)));
+const ol=(start,items)=>h('ol',{className:'howto-list',start},...items.map((x,i)=>h('li',{key:i},...[].concat(x))));
+
+function HowToUsePage(){
+  return h('div',{className:'docs-page'},
+    h('div',{className:'docs-hero'},
+      h('div',{className:'docs-hero-kicker'},'User Guide · ajatau AML'),
+      h('div',{className:'docs-hero-title'},'How to use'),
+      h('p',{className:'docs-hero-sub'},B('Time:'),' about 5 minutes with test data · ',B('You need:'),' nothing except a browser. ',B('Use synthetic data only.'))
+    ),
+    h('div',{className:'docs-section'},
+      h('div',{className:'docs-section-title'},'The six steps'),
+      h('p',{className:'docs-p'},'The progress bar across the top of the generator shows where you are:'),
+      h('div',{className:'steps guide-steps'},PHASES.map(p=>h('div',{key:p,className:'step'},p))),
+      h('div',{className:'flow'},
+        gstep('1','fn-gray','Triage: pick the alert','● Human','who-human',ol(1,[
+          ['In the ',B('EDD Alert Triage'),' panel on the left, click one of the two alerts (e.g. ',C('CUST-NORDIC-772'),').'],
+          'Read the flags: risk, transaction type, mixer exposure, adverse media, SoW verified, PEP, OFAC, OSINT note.',
+          ['Decide whether it warrants EDD. If it does, carry on. ',h('em',null,'(The tool has no "close alert" option yet; that\'s planned.)')]])),
+        gstep('2','fn-gray','Subject: who is it about','● Human','who-human',ol(4,[
+          ['Fill in name, date of birth, address, contact, ID number and email. ',B('Shortcut:'),' click ',B('⚡ Fill test data'),' to load a complete synthetic case (subject and transactions).']])),
+        gstep('3','fn-gray','Tx: the transactions','● Human','who-human',ol(5,[
+          'Add one row per transaction: date, amount, currency, sender, receiver, method, details.',
+          ['Add rows until the pattern is visible (in → mixer → out, structuring, pass-through…).',h('span',{className:'howto-tip'},'Tip: the narrative can only be as accurate as this table.')]])),
+        gstep('4','fn-amber','Generate','◆ AI (Claude)','who-ai',ol(7,[
+          ['Click ',B('Generate SAR Narrative →'),'. The AI writes three paragraphs from exactly what you entered: facts, findings, considerations.'],
+          'It takes a few seconds. If it fails, the error appears and you go back to the transaction step with your data kept.'])),
+        gstep('5','fn-red','Review: this is your job, not the AI\'s','● Human — checklist and export are here too','who-human',ol(9,[
+          ['The draft appears under ',B('Statement of Facts — Edit Before Export'),'. Edit it directly.'],
+          ['Check every ',B('amount and date'),' against your transaction table. The AI can misstate numbers.'],
+          'The AI is told not to cite article numbers. If any appear anyway, delete or verify them.',
+          'Paragraph 3 lists factors for and against filing. Whether to file is your decision.',
+          ['Still on the review screen, tick the four checks under ',B('2LoD Validation Checklist'),', each only if it\'s actually true:',
+            h('ul',{className:'howto-list',style:{listStyle:'square'}},
+              ['Proof of Funds / Wealth verified','KYC confirmed — identity & residency','Crypto exposure & media review','OFAC / sanctions re-confirmed'].map(x=>h('li',{key:x},x)))],
+          'The button reads "Complete checklist to unlock" until all four are ticked.',
+          ['Click ',B('Download SAR PDF →'),'.']])),
+        gstep('6','fn-teal','Export','● Human — sections 8 and 9 are filled in by hand','who-human',ol(16,[
+          ['The export summary confirms the download; ',B('Re-download PDF'),' and ',B('← New Investigation'),' are here.'],
+          'The PDF has ten sections: case details, subject, your edited narrative, transactions, red flags, typologies, additional information, escalation, decision, signatures.',
+          [B('Fill in sections 8 and 9 by hand:'),' account action, EDD date, and the decision (File SAR / Do not file / More information needed) with your rationale. The tool leaves these blank on purpose.']]))
+      )
+    ),
+    h('div',{className:'docs-section'},
+      h('div',{className:'docs-section-title'},'Good practice while using it'),
+      h('div',{className:'hitl-box'},
+        h('div',{className:'hitl-box-title'},'Before you trust the output'),
+        h('ul',{className:'docs-list'},
+          h('li',null,'Keep a separate note of ',B('why'),' you escalated. The tool doesn\'t log it yet.'),
+          h('li',null,'Don\'t paste real customer data into the public demo. Subject data goes to the model provider.'),
+          h('li',null,'Treat the output as a first draft. An FIU reads a SAR as your statement.')))
+    ),
+    h('div',{className:'docs-section'},
+      h('div',{className:'docs-section-title'},'Troubleshooting'),
+      tbl(['Symptom','Likely cause'],[
+        ['"API key not configured"',[C('ANTHROPIC_API_KEY'),' missing in Vercel env vars']],
+        ['"HTTP 429" or "rate_limit"','Too many calls to the Anthropic API; wait and retry'],
+        ['Narrative stops mid-sentence',['Hit the ',C('max_tokens: 1000'),' cap; shorten the input or raise the cap']],
+        ['Download button greyed out','One of the four boxes is unticked']])
+    ),
+    pageFoot()
+  );
+}
+
+function PlacePage(){
+  const st=k=>h('span',{className:'tag '+STATUS[k][0]},STATUS[k][1]);
+  return h('div',{className:'docs-page'},
+    h('div',{className:'docs-hero'},
+      h('div',{className:'docs-hero-kicker'},'AML Operating System · Layer 5'),
+      h('div',{className:'docs-hero-title'},'Place in the AML OS'),
+      h('p',{className:'docs-hero-sub'},B('Primary layer: 5 · Investigation & reporting.'),' Planned second layer: 4 · Control systems (TM), plus 6 · Effectiveness, via the TM Rule-Tuning Lab. ',
+        h('a',{href:'https://ajatauaml.com/aml-operating-system.html'},'See the full map ↗'))
+    ),
+    h('div',{className:'docs-section'},
+      h('div',{className:'docs-section-title'},'Where it sits'),
+      h('ol',{className:'layer-map'},
+        [['1','Governance','Policy Reader',''],['2','Risk assessment','not built','none'],['3','Customer lifecycle','Scamnot',''],
+         ['4','Control systems','TM Lab — planned','planned'],['5','Investigation & reporting','SAR Draft Automation','here'],['6','Effectiveness','TM Lab rule-performance view — planned','planned']]
+          .map(([n,name,tool,cls])=>h('li',{key:n,className:'lm-row '+cls},h('span',{className:'lm-num'},n),h('span',{className:'lm-name'},name),h('span',{className:'lm-tool'},tool))))
+    ),
+    h('div',{className:'docs-section'},
+      h('div',{className:'docs-section-title'},'What it covers in Layer 5'),
+      tbl(['Layer 5 element (from the AML OS map)','Status today','Honest note'],[
+        ['Evidence → structured case facts',st('ok'),'Facts are typed in by hand, not pulled from systems'],
+        ['Typology & red flags',st('ok'),'Red flags and typologies are printed from the alert flags. Separating fact from inference is still planned (templated facts paragraph).'],
+        ['SAR/STR narrative draft',st('ok'),'One LLM call'],
+        ['✱ Disposition & escalation (human)',st('part'),'No disposition field. The escalation decision isn\'t recorded.'],
+        ['✱ MLRO decision (human)',st('part'),'The PDF leaves File / Do not file / More info blank for the officer and MLRO (fixed 24 Sept 2026). Not yet recorded in the app.'],
+        ['Alert triage queue · FIU submission',st('no'),'Two static alerts; no FIU format yet (planned)']])
+    ),
+    h('div',{className:'docs-section'},
+      h('div',{className:'docs-section-title'},'Upstream: what feeds it'),
+      tbl(['From','Today','Planned'],[
+        ['Layer 4 · TM alerts','Two hard-coded sample alerts',['Alerts from the ',B('TM Lab'),' rules, carrying rule ID, version and parameters']],
+        ['Layer 4 · Sanctions','Static "OFAC: Clear"','Fuzzy screening module'],
+        ['Layer 3 · Customer / KYB file','Typed in','Could take Scamnot\'s evidence pack as the OSINT input']])
+    ),
+    h('div',{className:'docs-section'},
+      h('div',{className:'docs-section-title'},'Downstream: what it feeds'),
+      tbl(['To','What'],[
+        ['MLRO (human)','Draft + checklist → filing decision'],
+        ['FIU','Not connected. PDF only. (FIU field map planned)'],
+        ['Layer 6 · Effectiveness','Planned: triage closures and SAR conversion per rule go back into the TM Lab metrics'],
+        ['Layer 2 · Customer risk','Planned: an escalated case should raise the customer\'s risk rating']])
+    ),
+    h('div',{className:'docs-section'},
+      h('div',{className:'docs-section-title'},'Human gates (✱ in the map)'),
+      h('div',{className:'flow'},
+        [['Triage','Analyst decides the alert needs investigation.'],
+         ['Review','Analyst edits the narrative.'],
+         ['Checklist','Four confirmations before export.'],
+         ['Decision','On the PDF only (blank tick boxes plus rationale). Next step: record it in the app with name and timestamp.']]
+          .map(([t,d],i)=>h('div',{key:t,className:'flow-step'},
+            h('div',{className:'flow-num fn-red'},String(i+1)),
+            h('div',{className:'flow-content'},h('div',{className:'flow-title'},t),h('div',{className:'flow-desc'},d),h('span',{className:'flow-who who-human'},'● Human')))))
+    ),
+    h('div',{className:'docs-section'},
+      h('div',{className:'docs-section-title'},'Why this layer matters to employers'),
+      h('div',{className:'hitl-box'},
+        h('div',{className:'hitl-box-title'},'From workflow shape to alert-to-report chain'),
+        h('p',null,'The Sumsub RFP blueprint puts ',B('80–90% of TM cost in manual review time'),' and benchmarks ',B('80–85% FIU fields auto-filled'),' with ',B('mandatory MLRO digital sign-off'),'. This tool shows the workflow shape. The planned changes (TM Lab feed, computed indicators, FIU map, audit log) turn it into the full alert-to-report chain, with the human decision recorded rather than pre-written.')),
+      h('p',{className:'caveat'},'Benchmarks are from Sumsub\'s own vendor material. Treat them as buyer expectations, not independent industry data.')
+    ),
+    pageFoot()
+  );
+}
+
+/* ══════════════════════════════════════
    MAIN SAR APP COMPONENT
 ══════════════════════════════════════ */
 function SARApp(){
@@ -843,7 +1010,10 @@ Use only facts given above. If something is unknown, say it is unknown.`;
    ROOT — handles nav between app / docs
 ══════════════════════════════════════ */
 function Root(){
-  const [view,setView]=useState('app');
+  const VIEWS={'':'app','#how-to-use':'howto','#how-it-works':'docs','#place-in-aml-os':'place'};
+  const [view,setViewRaw]=useState(VIEWS[location.hash]||'app');
+  const setView=v=>{setViewRaw(v);const hash=Object.keys(VIEWS).find(k=>VIEWS[k]===v);history.replaceState(null,'',hash||location.pathname);window.scrollTo(0,0);};
+  React.useEffect(()=>{const f=()=>setViewRaw(VIEWS[location.hash]||'app');addEventListener('hashchange',f);return()=>removeEventListener('hashchange',f);},[]);
   return h('div',{id:'root'},
     h('div',{className:'topnav'},
       h('div',{className:'topnav-left'},
@@ -852,10 +1022,12 @@ function Root(){
       ),
       h('div',{className:'nav-tabs'},
         h('button',{className:'nav-tab'+(view==='app'?' active':''),onClick:()=>setView('app')},'SAR Generator'),
-        h('button',{className:'nav-tab docs-tab'+(view==='docs'?' active':''),onClick:()=>setView('docs')},'How It Works')
+        h('button',{className:'nav-tab docs-tab'+(view==='howto'?' active':''),onClick:()=>setView('howto')},'How To Use'),
+        h('button',{className:'nav-tab docs-tab'+(view==='docs'?' active':''),onClick:()=>setView('docs')},'How It Works'),
+        h('button',{className:'nav-tab docs-tab'+(view==='place'?' active':''),onClick:()=>setView('place')},'Place in AML OS')
       )
     ),
-    view==='app'?h(SARApp):h(DocsPage)
+    view==='howto'?h(HowToUsePage):view==='docs'?h(DocsPage):view==='place'?h(PlacePage):h(SARApp)
   );
 }
 
