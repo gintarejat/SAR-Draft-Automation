@@ -735,7 +735,6 @@ function HowToUsePage(){
     h('div',{className:'docs-section'},
       h('div',{className:'docs-section-title'},'Troubleshooting'),
       tbl(['Symptom','Likely cause'],[
-        ['"API key not configured"',[C('ANTHROPIC_API_KEY'),' missing in Vercel env vars']],
         ['"HTTP 429" or "rate_limit"','Too many calls to the Anthropic API; wait and retry'],
         ['Narrative stops mid-sentence',['Hit the ',C('max_tokens: 1000'),' cap; shorten the input or raise the cap']],
         ['Download button greyed out','One of the four boxes is unticked']])
