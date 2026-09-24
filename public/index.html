@@ -641,21 +641,6 @@ function DocsPage(){
       )
     ),
 
-    /* HOW DATA FLOWS */
-    h('div',{className:'docs-section'},
-      h('div',{className:'docs-section-title'},'How data flows to Claude'),
-      h('p',{className:'docs-p'},'The AI receives only what the officer enters. It can still misstate or add details, which is why Step 5 exists. The prompt is constructed at generation time:'),
-      h('div',{className:'code-block'},
-        h('span',{className:'code-comment'},'// Transaction rows are serialised before sending\n'),
-        h('span',{className:'code-key'},'const '),h('span',null,'txStr = txRows\n  .filter(r => r.date || r.amount || r.sender)\n  .map(r => `Date:${r.date} Amount:${r.amount} ${r.ccy} ...`)\n  .join("\\n");\n\n'),
-        h('span',{className:'code-comment'},'// Sent to /api/generate (serverless proxy) — not directly to Anthropic\n'),
-        h('span',{className:'code-key'},'const '),h('span',null,'res = await fetch('),h('span',{className:'code-str'},'"/api/generate"'),h('span',null,', {\n  method: '),h('span',{className:'code-str'},'"POST"'),h('span',null,',\n  body: JSON.stringify({ model, max_tokens, messages })\n});\n\n'),
-        h('span',{className:'code-comment'},'// Response extraction — Claude returns standard JSON\n'),
-        h('span',{className:'code-key'},'const '),h('span',null,'text = data.content\n  .filter(b => b.type === '),h('span',{className:'code-str'},'"text"'),h('span',null,')\n  .map(b => b.text)\n  .join('),h('span',{className:'code-str'},'""'),h('span',null,');')
-      ),
-      h('p',{className:'docs-p'},'The proxy at ',h('strong',null,'api/generate.js'),' reads ',h('strong',null,'ANTHROPIC_API_KEY'),' from Vercel\'s server environment — it is never present in the browser bundle. No API key is ever exposed to the client.')
-    ),
-
     /* LIMITATIONS */
     h('div',{className:'docs-section'},
       h('div',{className:'docs-section-title'},'Limitations'),
